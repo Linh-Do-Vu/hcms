@@ -47,33 +47,33 @@ public class CrmEducationService implements ICrmEducationService {
     }
 
     @Override
-    public List<CrmEducation> createListDegree(List<CrmEducation> CRMEducationList, Long personId) {
-        AutoPkSupport autoPkSupport = autoPkSupportService.findAutoPkSupportByTableName(Constants.CONTACT);
+    public List<CrmEducation> createListEducation(List<CrmEducation> crmEducationList, Long personId) {
+        AutoPkSupport autoPkSupport = autoPkSupportService.findAutoPkSupportByTableName(Constants.EDUCATION);
         Long id = autoPkSupport.getNextId() + 1L;
-        for (CrmEducation CRMEducation : CRMEducationList) {
+        for (CrmEducation CRMEducation : crmEducationList) {
             CRMEducation.setEducationId(id);
             CRMEducation.setPersonID(personId);
             id++;
         }
         autoPkSupport.setNextId(id);
         autoPkSupportService.save(autoPkSupport);
-        saveAllDegree(CRMEducationList);
-        Log.info("Degree service create list degree ");
-        return CRMEducationList;
+        saveAllDegree(crmEducationList);
+        Log.info("Education service create list education ");
+        return crmEducationList;
     }
 
     @Override
-    public List<CrmEducation> saveAllDegree(List<CrmEducation> CRMEducationList) {
+    public List<CrmEducation> saveAllDegree(List<CrmEducation> crmEducationList) {
        try {
-           return repository.saveAll(CRMEducationList);
+           return repository.saveAll(crmEducationList);
        }catch (Exception ex) {
            throw  new CustomException(ErrorCode.UNPROCESSABLE_ENTITY,"Học vấn không được bỏ trống") ;
        }
     }
     @Override
-    public List<CrmEducation> updateAndCreateDegree(List<CrmEducation> CRMEducationList, Long personId) {
-        List<Long> idDegreeNews = CRMEducationList.stream().filter(degree -> degree.getEducationId() != null).map(CrmEducation::getEducationId).collect(Collectors.toList());
-        List<CrmEducation> CRMEducationOld = findAllDegreeByPerson(personId);
+    public List<CrmEducation> updateAndCreateDegree(List<CrmEducation> crmEducationList, Long personId) {
+        List<Long> idDegreeNews = crmEducationList.stream().filter(degree -> degree.getEducationId() != null).map(CrmEducation::getEducationId).collect(Collectors.toList());
+        List<CrmEducation> CRMEducationOld = findAllEducationByPerson(personId);
         List<Long> idDegreeOlds = CRMEducationOld.stream().map(CrmEducation::getEducationId).collect(Collectors.toList());
         for (Long id : idDegreeOlds
         ) {
@@ -81,7 +81,7 @@ public class CrmEducationService implements ICrmEducationService {
                 delete(id);
             }
         }
-        for (CrmEducation CRMEducation : CRMEducationList
+        for (CrmEducation CRMEducation : crmEducationList
         ) {
             if (CRMEducation.getEducationId() != null) {
                 save(CRMEducation);
@@ -92,11 +92,11 @@ public class CrmEducationService implements ICrmEducationService {
                 save(CRMEducation);
             }
         }
-        return CRMEducationList;
+        return crmEducationList;
     }
 
     @Override
-    public List<CrmEducation> findAllDegreeByPerson(Long personID) {
+    public List<CrmEducation> findAllEducationByPerson(Long personID) {
         return repository.findAllByPersonID(personID);
     }
 }

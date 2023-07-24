@@ -21,7 +21,7 @@ public class DocumentAndPersonDetailDTO {
     private CrmPerson person;
     private List<CrmContact> contactList;
     private List<CrmPersonDoc> docList;
+    private List<CrmEducation> educationList;
     private List<DocDocAttribute> attributeList;
     private Long documentId ;
-    private List<CrmEducation> CRMEducationList;
 }

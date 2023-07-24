@@ -6,6 +6,8 @@ import com.example.ezhcm.dto.person.PersonDocDTO;
 import com.example.ezhcm.model.person.*;
 import com.example.ezhcm.service.crm_contact.ICrmContactService;
 import com.example.ezhcm.service.crm_contacttype.ICrmContactTypeService;
+import com.example.ezhcm.service.crm_education.ICrmEducationService;
+import com.example.ezhcm.service.crm_educationtype.ICrmEducationTypeService;
 import com.example.ezhcm.service.crm_person.ICrmPerSonService;
 import com.example.ezhcm.service.crm_persondoc.ICrmPersonDocService;
 import com.example.ezhcm.service.crm_persondoctype.ICrmPersonDocTypeService;
@@ -24,6 +26,8 @@ public class PersonInformationService implements IPersonInformationService {
     private final ICrmContactService contactService;
     private final ICrmContactTypeService contactTypeService;
     private final ICrmPersonDocTypeService personDocTypeService;
+    private final ICrmEducationService educationService ;
+    private final ICrmEducationTypeService educationTypeService;
     @Override
     public PersonDTO getPersonDetail(Long personId) {
         CrmPerson person = personService.findById(personId).get();
@@ -46,11 +50,20 @@ public class PersonInformationService implements IPersonInformationService {
             return PersonDocDTO.builder().personDoc(crmPersonDoc).personDocType(crmPersonDocTypeMatch).build();
         }).collect(Collectors.toList());
 
+        List<CrmEducation> educationList = educationService.findAllEducationByPerson(personId) ;
+        List<CrmEducationType> educationTypeList = educationTypeService.findAll() ;
+        List<PersonDTO.PersonEducationDTO> personEducationDTOS = educationList.stream().map(crmEducation ->{
+            CrmEducationType crmEducationTypeMatch = educationTypeList.stream().filter(crmEducationType ->
+                crmEducationType.getEduTypeID().equals(crmEducation.getEduTypeId())).findFirst().orElse(null);
+        return PersonDTO.PersonEducationDTO.builder().crmEducation(crmEducation).crmEducationType(crmEducationTypeMatch).build();
+        }).collect(Collectors.toList());
+
 
         PersonDTO personDTO = new PersonDTO();
         personDTO.setPerson(person);
         personDTO.setPersonContactDTOS(personContactDTOList);
         personDTO.setPersonDocDTOS(personDocDTOList);
+        personDTO.setPersonEducationDTOS(personEducationDTOS);
         return personDTO;
     }
 

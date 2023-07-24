@@ -3,6 +3,7 @@ package com.example.ezhcm.model;
 public class Constants {
     public static final String CONTACT_TYPE = "crm_contacttype";
     public static final String CONTACT = "crm_contact";
+    public static final String EDUCATION = "crm_education";
     public static final String PERSON = "crm_person";
     public static final String PERSON_DOC = "crm_persondoc";
     public static final String PERSON_DOC_TYPE = "crm_persondoctype";

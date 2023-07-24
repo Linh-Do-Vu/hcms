@@ -19,8 +19,8 @@ public interface ICrmEducationService extends IService<CrmEducation,Long> {
     @Override
     void delete(Long aLong);
 
-    List<CrmEducation> createListDegree(List<CrmEducation> CRMEducationList, Long personId) ;
+    List<CrmEducation> createListEducation(List<CrmEducation> CRMEducationList, Long personId) ;
     List<CrmEducation> saveAllDegree(List<CrmEducation> CRMEducationList) ;
     List<CrmEducation> updateAndCreateDegree(List<CrmEducation> CRMEducationList, Long personId) ;
-   List<CrmEducation> findAllDegreeByPerson (Long personID) ;
+   List<CrmEducation> findAllEducationByPerson(Long personID) ;
 }

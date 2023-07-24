@@ -23,7 +23,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("document")
+@RequestMapping("document-person")
 @RequiredArgsConstructor
 public class DocumentController {
     private final IPersonDocumentAndContactService personDocContactService;

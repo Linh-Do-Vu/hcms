@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -27,12 +28,12 @@ public class CrmPerson {
     private String lastName;
 
     @Column(name = "birthdate")
-    private Long birthDate;
+    private LocalDateTime birthDate;
 
     @Column(name = "gender",nullable = false)
     private Long gender;
 
-    @Column(name = "job",nullable = false,columnDefinition = "nvarchar(250)")
+    @Column(name = "job",columnDefinition = "nvarchar(250)")
     private String job;
 
 

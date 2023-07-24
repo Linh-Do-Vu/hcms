@@ -17,12 +17,12 @@ public class  PersonDTO {
     private CrmPerson person;
     private List<PersonContactDTO> personContactDTOS;
     private List<PersonDocDTO> personDocDTOS;
-    private List<DegreeDTO> degreeDTOs;
+    private List<PersonEducationDTO> personEducationDTOS;
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
-    public static class DegreeDTO {
+    public static class PersonEducationDTO {
         private CrmEducation crmEducation;
         private CrmEducationType crmEducationType;
     }

@@ -65,8 +65,7 @@ public class PersonDocumentAndContactService implements IPersonDocumentAndContac
     private final IDepEmployeeService depEmployeeService;
     private final IRefRefItemService itemService;
     private final IDepDepartmentService departmentService;
-    private final ICrmEducationService degreeService ;
-
+    private final ICrmEducationService educationService ;
     @Override
     @Transactional
     public Long createPersonDocContact(DocumentAndPersonDetailDTO documentAndPersonDetailDTO) {
@@ -78,14 +77,14 @@ public class PersonDocumentAndContactService implements IPersonDocumentAndContac
             Long personId = person.getPersonId();
             contactService.updateAndCreateContact(documentAndPersonDetailDTO.getContactList(), personId);
             personDocService.updateAndCreatePersonDoc(documentAndPersonDetailDTO.getDocList(), personId);
-            degreeService.createListDegree(documentAndPersonDetailDTO.getCRMEducationList(),personId) ;
+            educationService.createListEducation(documentAndPersonDetailDTO.getEducationList(),personId) ;
             return saveAttributeProAttributeProcessing(documentAndPersonDetailDTO, idEmployee, personId);
         } else {
             CrmPerson personNewCreate = perSonService.createPerson(person);
             Long personNewId = personNewCreate.getPersonId();
             contactService.createListCrmContact(documentAndPersonDetailDTO.getContactList(), personNewId);
             personDocService.createListPersonDoc(documentAndPersonDetailDTO.getDocList(), personNewId);
-            degreeService.createListDegree(documentAndPersonDetailDTO.getCRMEducationList(),personNewId) ;
+            educationService.createListEducation(documentAndPersonDetailDTO.getEducationList(),personNewId) ;
             return saveAttributeProAttributeProcessing(documentAndPersonDetailDTO, idEmployee, personNewId);
         }
 
@@ -93,7 +92,8 @@ public class PersonDocumentAndContactService implements IPersonDocumentAndContac
 
     @Override
     public Long saveAttributeProAttributeProcessing(DocumentAndPersonDetailDTO documentAndPersonDetailDTO, Long idEmployee, Long personNewId) {
-        DocDocument docDocument = docDocumentService.createDocDocument(documentAndPersonDetailDTO.getDocumentTypeId(), idEmployee, personNewId);
+
+        DocDocument docDocument = docDocumentService.createDocDocument(1L, idEmployee, personNewId);
         Long idDocument = docDocument.getDocumentId();
         docAttributeService.saveAll(documentAndPersonDetailDTO.getAttributeList(), idDocument);
         DocDocProcessing docProcessing = docDocProcessingService.createDocProcessing(idDocument, idEmployee, "Initial");
