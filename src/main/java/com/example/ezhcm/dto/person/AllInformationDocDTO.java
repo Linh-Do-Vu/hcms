@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class AllInformationDocDTO {
-    private Long documentNumber;
+    private String documentNumber;
     private LocalDateTime creationDate;
     private Long state;
     private String documentType;

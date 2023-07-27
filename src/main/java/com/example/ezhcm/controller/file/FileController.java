@@ -1,5 +1,6 @@
 package com.example.ezhcm.controller.file;
 
+import com.example.ezhcm.dto.file.AttachTypeDTO;
 import com.example.ezhcm.dto.file.AttachmentDTO;
 import com.example.ezhcm.dto.file.AttachListIdDTO;
 import com.example.ezhcm.model.file.ObjAttachType;
@@ -48,7 +49,8 @@ public class FileController {
     @GetMapping("get-attach-type")
     ResponseEntity<?> getListAttachType() {
         List<ObjAttachType> typeList = attachTypeService.findAll();
-        return new ResponseEntity<>(typeList, HttpStatus.OK);
+        List<AttachTypeDTO> attachTypeDTOS = typeList.stream().map(ObjAttachType-> new AttachTypeDTO(ObjAttachType.getAttachmentTypeId(),ObjAttachType.getAttTypePath()) ).collect(Collectors.toList());
+        return new ResponseEntity<>(attachTypeDTOS, HttpStatus.OK);
     }
 
     @GetMapping("get-attach-list-by-document-id")

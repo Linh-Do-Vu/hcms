@@ -166,7 +166,7 @@ public class CrmPersonDocService implements ICrmPersonDocService {
     public Page<Long> searchPersonByCustomWithDepartment(Long personId, String contactValue, Long contactTypeId, String docNumber, Long personDocTypeId, String lastname, String firstname, Pageable pageable) {
 
         List<Long> listDepartmentId = documentService.getListChildIdDepartment();
-        Page<Long> listDocumentId = personDocRepository.searchListDocumentIdByPersonWithDepartment(personId, contactValue, contactTypeId, docNumber, personDocTypeId, lastname, firstname, pageable, listDepartmentId);
+        Page<Long> listDocumentId = personDocRepository.searchListDocumentIdByPersonWithDepartment(personId, contactValue, contactTypeId, docNumber, personDocTypeId, lastname, firstname, pageable, listDepartmentId,Constants.HO_SO_NHAN_SU);
 
         Log.info("List person id : " + listDocumentId.toString());
         if (listDocumentId.isEmpty()) {

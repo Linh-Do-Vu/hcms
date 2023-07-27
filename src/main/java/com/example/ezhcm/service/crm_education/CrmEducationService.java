@@ -86,7 +86,7 @@ public class CrmEducationService implements ICrmEducationService {
             if (CRMEducation.getEducationId() != null) {
                 save(CRMEducation);
             } else {
-                Long id = autoPkSupportService.generateId(Constants.CONTACT);
+                Long id = autoPkSupportService.generateId(Constants.EDUCATION);
                 CRMEducation.setEducationId(id);
                 CRMEducation.setPersonID(personId);
                 save(CRMEducation);
@@ -96,7 +96,20 @@ public class CrmEducationService implements ICrmEducationService {
     }
 
     @Override
+    public CrmEducation create(CrmEducation education) {
+        Long id = autoPkSupportService.generateId(Constants.EDUCATION);
+        education.setEducationId(id);
+        save(education);
+        return education;
+    }
+
+    @Override
     public List<CrmEducation> findAllEducationByPerson(Long personID) {
         return repository.findAllByPersonID(personID);
+    }
+
+    @Override
+    public void deleteAllEducation(Long personID) {
+        repository.deleteAllByPersonID(personID);
     }
 }

@@ -10,6 +10,7 @@ import com.example.ezhcm.dto.person.DocTypePersonDTO;
 import com.example.ezhcm.dto.person.PersonDTO;
 import com.example.ezhcm.exception.CustomException;
 import com.example.ezhcm.exception.ErrorCode;
+import com.example.ezhcm.model.Constants;
 import com.example.ezhcm.model.CoreUserAccount;
 import com.example.ezhcm.model.Log;
 import com.example.ezhcm.model.dep.DepDepartment;
@@ -77,7 +78,7 @@ public class PersonDocumentAndContactService implements IPersonDocumentAndContac
             Long personId = person.getPersonId();
             contactService.updateAndCreateContact(documentAndPersonDetailDTO.getContactList(), personId);
             personDocService.updateAndCreatePersonDoc(documentAndPersonDetailDTO.getDocList(), personId);
-            educationService.createListEducation(documentAndPersonDetailDTO.getEducationList(),personId) ;
+            educationService.updateAndCreateDegree(documentAndPersonDetailDTO.getEducationList(),personId) ;
             return saveAttributeProAttributeProcessing(documentAndPersonDetailDTO, idEmployee, personId);
         } else {
             CrmPerson personNewCreate = perSonService.createPerson(person);
@@ -93,7 +94,7 @@ public class PersonDocumentAndContactService implements IPersonDocumentAndContac
     @Override
     public Long saveAttributeProAttributeProcessing(DocumentAndPersonDetailDTO documentAndPersonDetailDTO, Long idEmployee, Long personNewId) {
 
-        DocDocument docDocument = docDocumentService.createDocDocument(1L, idEmployee, personNewId);
+        DocDocument docDocument = docDocumentService.createDocDocument(documentAndPersonDetailDTO.getDocumentTypeId(), idEmployee, personNewId);
         Long idDocument = docDocument.getDocumentId();
         docAttributeService.saveAll(documentAndPersonDetailDTO.getAttributeList(), idDocument);
         DocDocProcessing docProcessing = docDocProcessingService.createDocProcessing(idDocument, idEmployee, "Initial");
@@ -103,37 +104,18 @@ public class PersonDocumentAndContactService implements IPersonDocumentAndContac
     }
 
     @Override
-    public List<DocTypePersonDTO> getListBaseDocument() {
-        List<Tuple> tupleList = docDocumentService.queryGetAllListDocPerson();
-        return docDocumentService.getAllListDocPerson(tupleList);
-    }
-
-    @Override
-    public Page<DocTypePersonDTO> searchListBaseDocument(Long documentNumber, Long documentTypeId,
-                                                         Long employeeID,
-                                                         LocalDateTime startDate, LocalDateTime endDate, Long state, List<Long> personId, Pageable pageable, List<Long> listDocumentId) {
+    public Page<DocTypePersonDTO> searchListBaseDocumentPerson(String documentNumber, Long documentTypeId,
+                                                               Long employeeID,
+                                                               LocalDateTime startDate, LocalDateTime endDate, Long state, List<Long> personId, Pageable pageable, List<Long> listDocumentId) {
         Log.info("Search document by" + " document number " + documentNumber + " document type id " + documentTypeId +
                 " EmployeeId " + employeeID + " start date " + startDate + " end date " + endDate + " state " + state);
         Page<Tuple> tupleList = docDocumentService.searchDocumentByPersonAndIdDocument(documentNumber, documentTypeId, employeeID, startDate, endDate, state, personId, pageable, listDocumentId);
-        return docDocumentService.getAllListDocPersonPage(tupleList, pageable);
+        return docDocumentService.getAllListDocPersonPage(tupleList,pageable);
     }
-
-//    @Override
-//    public Page <DocTypePersonDTO> searchListBaseDocumentNoDepartment(Long documentNumber, Long documentTypeId, Long employeeID, LocalDateTime startDate, LocalDateTime endDate, Long state, List<Long> personId) {
-//        Log.info("Search document by" + " document number " + documentNumber + " document type id " + documentTypeId +
-//                " EmployeeId " + employeeID + " start date " + startDate + " end date " + endDate + " state " + state);
-//        List<Tuple> tupleList = docDocumentService.searchByCustom(documentNumber, documentTypeId, employeeID, startDate, endDate, state, personId);
-//        return docDocumentService.getAllListDocPerson(tupleList);
-//    }
 
 
     @Override
-    public Page<DocTypePersonDTO> searchListBaseDocumentWithPage(Long documentNumber, Long documentTypeId, Long employeeID, LocalDateTime startDate, LocalDateTime endDate, Long state, List<Long> personId) {
-        return null;
-    }
-
-    @Override
-    public List<AttributeDTO> searchListAttributeByDocumentNumber(Long number) {
+    public List<AttributeDTO> searchListAttributeByDocumentNumber(String number) {
         Optional<DocDocument> docDocument = docDocumentService.findByDocumentNumber(number);
         if (docDocument.isPresent()) {
             return docAttributeService.getAllListAttributeByIdDocument(docDocument.get().getDocumentId());
@@ -165,7 +147,8 @@ public class PersonDocumentAndContactService implements IPersonDocumentAndContac
             contactService.createListCrmContact(personDTO.getContactList(), personId);
             personDocService.deleteAllPersonDocByPerson(personId);
             personDocService.createListPersonDoc(personDTO.getDocList(), personId);
-
+            educationService.deleteAllEducation(personId);
+            educationService.createListEducation(personDTO.getEducationList(),personId) ;
             List<DocDocAttribute> attributeList = docAttributeService.getAllListAttributeDetail(personDTO.getDocumentId());
             List<DocDocAttribute> differentAttrValues = docAttributeService.getDifferentAttributeDTO(attributeList, personDTO.getAttributeList(), personDTO.getDocumentId());
             DocDocProcessing docProcessing = docDocProcessingService.createDocProcessing(personDTO.getDocumentId(), idEmployee, "edit");
@@ -268,5 +251,19 @@ public class PersonDocumentAndContactService implements IPersonDocumentAndContac
             return employeeAndUserDTO;
         }else throw new CustomException(ErrorCode.UNAUTHORIZED,"Bạn không có quyền xem thông tin của người khác") ;
 
+    }
+
+    @Override
+    @Transactional
+    public Long createDocumentProject(List<DocDocAttribute> attributeList) {
+        CoreUserAccount coreUserAccount = coreUserAccountService.getUserLogging();
+        Long idEmployee = coreUserAccount.getEmployeeId();
+        DocDocument docDocument = docDocumentService.createDocDocument(Constants.HO_SO_DU_AN, idEmployee, 0L);
+        Long idDocument = docDocument.getDocumentId();
+        docAttributeService.saveAll(attributeList, idDocument);
+        DocDocProcessing docProcessing = docDocProcessingService.createDocProcessing(idDocument, idEmployee, "Initial");
+        Long idDocProcessing = docProcessing.getStageId();
+        docProcAttributeService.saveAllByDocAttribute(attributeList, idDocProcessing);
+        return idDocument;
     }
 }

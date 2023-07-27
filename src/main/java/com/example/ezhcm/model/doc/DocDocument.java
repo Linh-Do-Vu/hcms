@@ -23,7 +23,7 @@ public class DocDocument {
     private Long documentType;
 
     @Column(name = "documentnumber",nullable = false)
-    private Long documentNumber;
+    private String documentNumber;
 
     @Column(name = "creationdate",nullable = false)
     private LocalDateTime creationDate;

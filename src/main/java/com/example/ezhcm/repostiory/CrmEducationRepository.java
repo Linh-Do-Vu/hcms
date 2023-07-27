@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface CrmEducationRepository extends JpaRepository<CrmEducation,Long> {
     List<CrmEducation> findAllByPersonID (Long personId) ;
+    void deleteAllByPersonID (Long personId) ;
 }

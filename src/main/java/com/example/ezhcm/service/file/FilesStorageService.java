@@ -18,9 +18,9 @@ import java.nio.file.Paths;
 import java.util.stream.Stream;
 @Service
 public class FilesStorageService implements IFilesStorageService {
-//    private final Path root = Paths.get("upload");
+    private final Path root = Paths.get("uploads");
 
-    private final Path root = Paths.get("/opt/ezhospital/upload");
+//    private final Path root = Paths.get("/opt/ezhospital/upload");
 
     @Override
     public void init() {

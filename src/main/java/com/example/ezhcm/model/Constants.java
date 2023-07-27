@@ -11,6 +11,8 @@ public class Constants {
     public static final Long COUNT_LOGIN_FALSE_REFERENCE_ITEM = 2003L;
 
     public static final String DEPARTMENT = "dep_department";
+    public static final Long HO_SO_NHAN_SU = 1L;
+    public static final Long HO_SO_DU_AN = 2L;
     public static final String EMPLOYEE = "dep_employee";
     public static final String USER_ACCOUNT = "core_useraccount";
     public static final String DOCUMENT_TYPE = "doc_documenttype";
@@ -26,7 +28,6 @@ public class Constants {
     public static final String OBJ_ATTACHMENT = "obj_attachment";
     public static final String OBJ_ATTACH_TYPE = "obj_attachtype";
     public static final String ROOT_DEPARTMENT = "/root/department";
-    public static final String DEGREE = "degree";
-    public static final String DEGREE_TYPE= "degreetype";
+
 
 }

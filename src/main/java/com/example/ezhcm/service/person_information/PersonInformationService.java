@@ -86,6 +86,14 @@ public class PersonInformationService implements IPersonInformationService {
             }
         }
 
+        for (PersonDTO.PersonEducationDTO personEducationDTO : personDTO.getPersonEducationDTOS()) {
+            if( personEducationDTO.getCrmEducation().getPersonID()!=null) {
+                educationService.save(personEducationDTO.getCrmEducation()) ;
+            }else {
+                educationService.create(personEducationDTO.getCrmEducation()) ;
+            }
+        }
+
         return null;
     }
 

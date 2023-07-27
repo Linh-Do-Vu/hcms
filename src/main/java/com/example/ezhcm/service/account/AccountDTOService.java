@@ -23,8 +23,6 @@ public class AccountDTOService implements IAccountDTOService {
     private final IDepEmployeeService employeeService;
     private final ICoreUserAccountService coreUserAccountService;
     private final PasswordEncoder passwordEncoder;
-    private final IAutoPkSupportService autoPkSupportService;
-    private final IRoleService roleService;
     private final IRefRefItemService itemService;
 
     @Override

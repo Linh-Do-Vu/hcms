@@ -47,10 +47,10 @@ public class PersonController {
                                                         @RequestParam(value = "firstName", required = false) String firstName,Pageable pageable
     ) {
         Page<Long> listDocumentId = personDocService.searchPersonByCustomWithDepartment(personId, contactValue, contactTypeId, docNumber, personDocTypeId, lastName, firstName, pageable);
-        Pageable pageable2 = PageRequest.of(0, 1000);
+        Pageable pageable2 = PageRequest.of(0, 10000);
 
         Page<DocTypePersonDTO> docDocuments =
-                personDocContactService.searchListBaseDocument(null, null, null, null, null, null, null,pageable2,listDocumentId.getContent().stream().collect(Collectors.toList()));
+                personDocContactService.searchListBaseDocumentPerson(null, null, null, null, null, null, null,pageable2,listDocumentId.getContent().stream().collect(Collectors.toList()));
         Page<DocTypePersonDTO> result  = new PageImpl<>(docDocuments.getContent(), listDocumentId.getPageable(), listDocumentId.getTotalElements());
 
             return new ResponseEntity<>(result, HttpStatus.OK);

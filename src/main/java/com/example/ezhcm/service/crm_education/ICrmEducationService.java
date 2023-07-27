@@ -23,4 +23,6 @@ public interface ICrmEducationService extends IService<CrmEducation,Long> {
     List<CrmEducation> saveAllDegree(List<CrmEducation> CRMEducationList) ;
     List<CrmEducation> updateAndCreateDegree(List<CrmEducation> CRMEducationList, Long personId) ;
    List<CrmEducation> findAllEducationByPerson(Long personID) ;
+   CrmEducation create (CrmEducation education) ;
+   void deleteAllEducation (Long personID);
 }

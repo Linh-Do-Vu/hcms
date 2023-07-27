@@ -6,6 +6,7 @@ import com.example.ezhcm.dto.person.DocumentAndPersonDetailDTO;
 import com.example.ezhcm.dto.person.DocTypePersonDTO;
 import com.example.ezhcm.exception.CustomException;
 import com.example.ezhcm.exception.ErrorCode;
+import com.example.ezhcm.model.Constants;
 import com.example.ezhcm.model.Log;
 import com.example.ezhcm.service.doc_doc_attribute.IDocDocAttributeService;
 import com.example.ezhcm.service.person_doc_contact.IPersonDocumentAndContactService;
@@ -25,11 +26,12 @@ import java.util.List;
 @CrossOrigin("*")
 @RequestMapping("document-person")
 @RequiredArgsConstructor
-public class DocumentController {
+public class DocumentPersonController {
     private final IPersonDocumentAndContactService personDocContactService;
     private final IDocDocAttributeService attributeService;
     @PostMapping("/create")
-    public ResponseEntity<?> createDocument(@RequestBody DocumentAndPersonDetailDTO documentAndPersonDetailDto) {
+    public ResponseEntity<?> createDocumentPerson (@RequestBody DocumentAndPersonDetailDTO documentAndPersonDetailDto) {
+        documentAndPersonDetailDto.setDocumentTypeId(Constants.HO_SO_NHAN_SU );
         Long idDocument = personDocContactService.createPersonDocContact(documentAndPersonDetailDto);
         Log.info("Create person contact and document is " + idDocument);
         String response = "IdDocument: " + idDocument;
@@ -44,14 +46,8 @@ public class DocumentController {
         return new ResponseEntity<>(attributeDTOList, HttpStatus.OK);
     }
 
-    @GetMapping("/list-base-document")
-    public ResponseEntity<?> getListDocument(@PageableDefault(value = 10) Pageable pageable) {
-        List<DocTypePersonDTO> docDocumentList = personDocContactService.getListBaseDocument();
-        return personDocContactService.convertListToPage(pageable, docDocumentList);
-    }
-
     @GetMapping("/search-document")
-    public ResponseEntity<?> searchDocument(@RequestParam(value = "documentNumber", required = false) Long documentNumber,
+    public ResponseEntity<?> searchDocument(@RequestParam(value = "documentNumber", required = false) String documentNumber,
                                             @RequestParam(value = "documentTypeId", required = false) Long documentTypeId,
                                             @RequestParam(value = "employeeId", required = false) Long employeeId,
                                             @RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
@@ -62,7 +58,7 @@ public class DocumentController {
                                             @PageableDefault(value = 10) Pageable pageable
 
     ) {
-        Page<DocTypePersonDTO> docDocumentList = personDocContactService.searchListBaseDocument(documentNumber, documentTypeId, employeeId, startDate, endDate, state, personIds,pageable,null);
+        Page<DocTypePersonDTO> docDocumentList = personDocContactService.searchListBaseDocumentPerson(documentNumber, Constants.HO_SO_NHAN_SU, employeeId, startDate, endDate, state, personIds,pageable,null);
 
         if (!docDocumentList.isEmpty()) {
             return new ResponseEntity<>(docDocumentList,HttpStatus.OK);
@@ -70,7 +66,7 @@ public class DocumentController {
     }
 
     @GetMapping("/search-document-number")
-    public ResponseEntity<?> GetApplicationByID(@RequestParam(value = "documentNumber", required = false) Long documentNumber) {
+    public ResponseEntity<?> GetApplicationByID(@RequestParam(value = "documentNumber", required = false) String documentNumber) {
         Log.info("Get list attribute by document number" + documentNumber);
         List<AttributeDTO> result = personDocContactService.searchListAttributeByDocumentNumber(documentNumber);
         return new ResponseEntity<>(result, HttpStatus.OK);

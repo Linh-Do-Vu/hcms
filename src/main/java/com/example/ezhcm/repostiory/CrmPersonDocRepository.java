@@ -46,8 +46,9 @@ public interface CrmPersonDocRepository extends JpaRepository<CrmPersonDoc,Long>
             "AND (crm_person.lastname LIKE CONCAT('%', COALESCE(?6, crm_person.lastname), '%') " +
             "AND crm_person.firstname LIKE CONCAT('%', COALESCE(?7, crm_person.firstname), '%')) " +
             "AND doc_document.departmentid in (?8) " +
+            "AND doc_document.documenttype like (?9) " +
             "GROUP BY doc_document.documentId " +
             "ORDER BY doc_document.documentId DESC", nativeQuery = true)
-    Page <Long> searchListDocumentIdByPersonWithDepartment(Long personId, String contactValue, Long contactTypeId, String docNumber, Long personDocTypeId, String lastname, String firstname, Pageable pageable,List<Long> departmentIds);
+    Page <Long> searchListDocumentIdByPersonWithDepartment(Long personId, String contactValue, Long contactTypeId, String docNumber, Long personDocTypeId, String lastname, String firstname, Pageable pageable,List<Long> departmentIds,Long documentType);
 
 }
