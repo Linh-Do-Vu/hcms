@@ -1,6 +1,5 @@
 package com.example.ezhcm.repostiory;
 
-import com.example.ezhcm.dto.tesssst;
 import com.example.ezhcm.model.doc.DocDocument;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.Tuple;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Repository

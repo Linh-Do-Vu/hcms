@@ -6,7 +6,6 @@ import com.example.ezhcm.repostiory.DocDocumentRepository;
 import com.example.ezhcm.service.doc_doc_attribute.IDocDocAttributeService;
 import com.example.ezhcm.service.person_doc_contact.IPersonDocumentAndContactService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.amqp.RabbitRetryTemplateCustomizer;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
