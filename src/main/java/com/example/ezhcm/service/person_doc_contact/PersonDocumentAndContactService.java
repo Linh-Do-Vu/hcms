@@ -1,9 +1,6 @@
 package com.example.ezhcm.service.person_doc_contact;
 
-import com.example.ezhcm.dto.AttributeDTO;
-import com.example.ezhcm.dto.CoreUserAccountDTO;
-import com.example.ezhcm.dto.EmployeeAndUserDTO;
-import com.example.ezhcm.dto.EmployeeDTO;
+import com.example.ezhcm.dto.*;
 import com.example.ezhcm.dto.person.AllInformationDocDTO;
 import com.example.ezhcm.dto.person.DocumentAndPersonDetailDTO;
 import com.example.ezhcm.dto.person.DocTypePersonDTO;
@@ -109,7 +106,7 @@ public class PersonDocumentAndContactService implements IPersonDocumentAndContac
                                                                LocalDateTime startDate, LocalDateTime endDate, Long state, List<Long> personId, Pageable pageable, List<Long> listDocumentId) {
         Log.info("Search document by" + " document number " + documentNumber + " document type id " + documentTypeId +
                 " EmployeeId " + employeeID + " start date " + startDate + " end date " + endDate + " state " + state);
-        Page<Tuple> tupleList = docDocumentService.searchDocumentByPersonAndIdDocument(documentNumber, documentTypeId, employeeID, startDate, endDate, state, personId, pageable, listDocumentId);
+        Page<Tuple> tupleList = docDocumentService.searchDocumentPersonByPersonAndIdDocument(documentNumber, documentTypeId, employeeID, startDate, endDate, state, personId, pageable, listDocumentId);
         return docDocumentService.getAllListDocPersonPage(tupleList,pageable);
     }
 
@@ -265,5 +262,12 @@ public class PersonDocumentAndContactService implements IPersonDocumentAndContac
         Long idDocProcessing = docProcessing.getStageId();
         docProcAttributeService.saveAllByDocAttribute(attributeList, idDocProcessing);
         return idDocument;
+    }
+
+    @Override
+    public Page<DocumentProjectSimpleDTO> searchListBaseDocumentProject(Long state, Long employeeId, String documentNumber, LocalDateTime startDate, LocalDateTime endDate, Long customerId, Pageable pageable) {
+       Page<Object[]> list = docDocumentService.searchDocumentProjectByPersonAndDocumentIf(state,employeeId,documentNumber,startDate,endDate,customerId,pageable);
+
+        return docDocumentService.getAllListDocProjectPage(list);
     }
 }

@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping(value = "role")
+@RequestMapping(value = "roles")
 public class RoleController {
     private final IRoleService role ;
 
     public RoleController(IRoleService role) {
         this.role = role;
     }
-    @GetMapping("list-role")
+    @GetMapping("all")
     public ResponseEntity<?> getListRoles() {
         return new ResponseEntity<>(role.findAll(), HttpStatus.OK);
     }

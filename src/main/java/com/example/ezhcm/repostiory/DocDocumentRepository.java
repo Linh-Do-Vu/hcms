@@ -93,5 +93,5 @@ public interface DocDocumentRepository extends JpaRepository<DocDocument, Long> 
             "AND (doc_docattribute.attrpath = 'root/numberOfContract' OR doc_docattribute.attrpath = 'root/startDay' OR doc_docattribute.attrpath = 'root/endDay')\n" +
             "GROUP BY doc_document.documentid, doc_document.documentnumber, doc_document.state" +
             " ORDER BY doc_document.documentid DESC;")
-    Page <Object> searchAllDocumentProjectByPerson (Long state,Long employeeId,String documentNumber,LocalDateTime startDate, LocalDateTime endDate,Long customerId,List<Long> listDepartmentId,Pageable pageable ) ;
+    Page <Object[]> searchAllDocumentProjectByPerson (Long state,Long employeeId,String documentNumber,LocalDateTime startDate, LocalDateTime endDate,Long customerId,List<Long> listDepartmentId,Pageable pageable ) ;
 }

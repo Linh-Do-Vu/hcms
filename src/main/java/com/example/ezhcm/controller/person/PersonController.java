@@ -2,10 +2,17 @@ package com.example.ezhcm.controller.person;
 
 import com.example.ezhcm.dto.person.DocTypePersonDTO;
 import com.example.ezhcm.dto.person.PersonDTO;
+import com.example.ezhcm.dto.person.PersonDocContactEducationTypeDTO;
 import com.example.ezhcm.exception.CustomException;
 import com.example.ezhcm.exception.ErrorCode;
+import com.example.ezhcm.model.person.CrmContactType;
+import com.example.ezhcm.model.person.CrmEducationType;
+import com.example.ezhcm.model.person.CrmPersonDocType;
 import com.example.ezhcm.repostiory.CrmPersonDocRepository;
+import com.example.ezhcm.service.crm_contacttype.ICrmContactTypeService;
+import com.example.ezhcm.service.crm_educationtype.ICrmEducationTypeService;
 import com.example.ezhcm.service.crm_persondoc.ICrmPersonDocService;
+import com.example.ezhcm.service.crm_persondoctype.ICrmPersonDocTypeService;
 import com.example.ezhcm.service.doc_document.IDocDocumentService;
 import com.example.ezhcm.service.person_doc_contact.IPersonDocumentAndContactService;
 import com.example.ezhcm.service.person_doc_contact.PersonDocumentAndContactService;
@@ -36,7 +43,9 @@ public class PersonController {
     private final IPersonInformationService personInformationService;
     private final IDocDocumentService docDocumentService;
     private final PersonDocumentAndContactService personDocumentAndContactService ;
-
+    private final ICrmContactTypeService contactTypeService;
+    private final ICrmPersonDocTypeService personDocTypeService;
+    private final ICrmEducationTypeService educationTypeService;
     @GetMapping("/search-document-by-information-person")
     public ResponseEntity<?> GetApplicationListByPerson(@RequestParam(value = "personId", required = false) Long personId,
                                                         @RequestParam(value = "contactValue", required = false) String contactValue,
@@ -93,5 +102,16 @@ public class PersonController {
     public ResponseEntity<?> getOnePersonInformation(@RequestParam(value = "personId") Long personId) {
         PersonDTO personDTO = personInformationService.getPersonDetail(personId);
         return new ResponseEntity<>(personDTO, HttpStatus.OK);
+    }
+    @GetMapping("/get-list-doc-contact-edu-type")
+    public ResponseEntity <PersonDocContactEducationTypeDTO> getListContactType () {
+        List<CrmContactType> contactTypes = contactTypeService.findAll();
+        List<CrmPersonDocType> personDocTypes =  personDocTypeService.findAll();
+        List<CrmEducationType> educations = educationTypeService.findAll() ;
+        PersonDocContactEducationTypeDTO typeDTO = new PersonDocContactEducationTypeDTO();
+        typeDTO.setContactTypes(contactTypes);
+        typeDTO.setPersonDocTypes(personDocTypes);
+        typeDTO.setEducationTypes(educations);
+        return new ResponseEntity<>(typeDTO, HttpStatus.OK);
     }
 }

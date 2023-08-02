@@ -24,7 +24,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("document-person")
+@RequestMapping("documents-person")
 @RequiredArgsConstructor
 public class DocumentPersonController {
     private final IPersonDocumentAndContactService personDocContactService;
@@ -38,15 +38,15 @@ public class DocumentPersonController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/attribute")
-    public ResponseEntity<?> getAttributeByIdDocument(@RequestParam(value = "idDocument") Long idDocument) {
+    @GetMapping("/{documentId}/attribute")
+    public ResponseEntity<?> getAttributeByIdDocument(@PathVariable(value = "documentId") Long idDocument) {
         List<AttributeDTO> attributeDTOList = attributeService.getAllListAttributeByIdDocument(idDocument);
         if (attributeDTOList.isEmpty()) throw new CustomException(ErrorCode.NOT_FOUND, " id bệnh án không tồn tại");
         Log.info("DocumentController getAttribute where document id = " + idDocument);
         return new ResponseEntity<>(attributeDTOList, HttpStatus.OK);
     }
 
-    @GetMapping("/search-document")
+    @GetMapping("/search-by-document/all")
     public ResponseEntity<?> searchDocument(@RequestParam(value = "documentNumber", required = false) String documentNumber,
                                             @RequestParam(value = "documentTypeId", required = false) Long documentTypeId,
                                             @RequestParam(value = "employeeId", required = false) Long employeeId,
@@ -72,22 +72,22 @@ public class DocumentPersonController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @PutMapping("/update-person-information-and-document")
+    @PutMapping("")
     public ResponseEntity<?> updatePersonInformationAndDocument(@RequestBody DocumentAndPersonDetailDTO personDocDTO) {
         Log.info("DocumentController.updatePersonInformationAndDocument ");
         DocumentAndPersonDetailDTO result = personDocContactService.updateDocumentAndPersonDetail(personDocDTO);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @GetMapping("/get-list-detail-doc-person")
-    public ResponseEntity<?> getListDocPersonDetail(@RequestParam("documentId") Long documentId) {
+    @GetMapping("{documentId}")
+    public ResponseEntity<?> getListDocPersonDetail(@PathVariable("documentId") Long documentId) {
         Log.info("DocumentController getListDocPersonDetail");
         AllInformationDocDTO result = personDocContactService.getAllInformationDocPerson(documentId);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @PutMapping("/close-document")
-    public ResponseEntity<?> closeDocument(@RequestParam(value = "idDocument") Long idDocument,
+    @PutMapping("/{documentId}/close")
+    public ResponseEntity<?> closeDocument(@PathVariable(value = "documentId") Long idDocument,
                                            @RequestParam(value = "comment") String comment
     ) {
         return new ResponseEntity<>(personDocContactService.closeDocument(idDocument, comment), HttpStatus.OK);

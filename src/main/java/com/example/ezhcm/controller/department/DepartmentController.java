@@ -17,7 +17,7 @@ public class DepartmentController {
     public DepartmentController(IDepDepartmentService departmentService) {
         this.departmentService = departmentService;
     }
-    @GetMapping("/list-department")
+    @GetMapping("/all")
     public ResponseEntity <?> getListDepartment(){
         return new ResponseEntity<>(departmentService.findAll(), HttpStatus.OK );
     }

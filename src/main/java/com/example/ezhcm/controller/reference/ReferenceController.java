@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping(value = "reference")
+@RequestMapping(value = "")
 public class ReferenceController {
     private final IRefRefItemService itemService ;
 
@@ -19,7 +19,7 @@ public class ReferenceController {
         this.itemService = itemService;
     }
 
-    @GetMapping("/list-position-reference-item")
+    @GetMapping("/positions/all")
     public ResponseEntity<?> getListPosition () {
     return new ResponseEntity<>( itemService.findAllByReferenceId(Constants.POSITION_REFERENCE_ITEM), HttpStatus.OK);
     }

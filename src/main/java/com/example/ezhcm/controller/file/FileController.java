@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/file")
+@RequestMapping("")
 @CrossOrigin(origins = "*", allowedHeaders = "*", exposedHeaders = "Content-Disposition")
 
 public class FileController {
@@ -34,9 +34,9 @@ public class FileController {
         this.attachTypeService = attachTypeService;
     }
 
-    @PostMapping("upload")
+    @PostMapping("documents/{documentId}/attachments/upload-attachments")
     ResponseEntity<?> uploadFile(@RequestParam("file") List<MultipartFile> files,
-                                 @RequestParam("documentId") Long documentId,
+                                 @PathVariable("documentId") Long documentId,
                                  @RequestParam("attachTypeId") Long attachTypeId
     ) {
         List<ObjAttachment> listAttachment = attachmentService.createListAttachment(files, documentId, attachTypeId);
@@ -46,21 +46,21 @@ public class FileController {
         return new ResponseEntity<>(attachListIdDTO, HttpStatus.OK);
     }
 
-    @GetMapping("get-attach-type")
+    @GetMapping("attachments/attach-types/all")
     ResponseEntity<?> getListAttachType() {
         List<ObjAttachType> typeList = attachTypeService.findAll();
         List<AttachTypeDTO> attachTypeDTOS = typeList.stream().map(ObjAttachType-> new AttachTypeDTO(ObjAttachType.getAttachmentTypeId(),ObjAttachType.getAttTypePath()) ).collect(Collectors.toList());
         return new ResponseEntity<>(attachTypeDTOS, HttpStatus.OK);
     }
 
-    @GetMapping("get-attach-list-by-document-id")
-    ResponseEntity<?> getListAttByDocumentId(@RequestParam("documentId") Long documentId) {
+    @GetMapping("/documents/{documentId}/attachments/all")
+    ResponseEntity<?> getListAttByDocumentId(@PathVariable("documentId") Long documentId) {
         List<AttachmentDTO> typeList = attachmentService.listAttachmentDTO(documentId);
         return new ResponseEntity<>(typeList, HttpStatus.OK);
     }
 
-@GetMapping("downloadFile")
-    ResponseEntity <?> downloadFile (@RequestParam("idAttachment") Long idAttachment) {
+@GetMapping("attachments/{attachmentId}/download")
+    ResponseEntity <?> downloadFile (@PathVariable("attachmentId") Long idAttachment) {
         return attachmentService.downloadFile(idAttachment) ;
 }
 

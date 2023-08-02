@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping( "/document-type")
+@RequestMapping( "/document-types")
 public class DocumentTypeController {
     private final IDocumentTypeService documentTypeService ;
 
@@ -18,7 +18,7 @@ public class DocumentTypeController {
         this.documentTypeService = documentTypeService;
     }
 
-    @GetMapping("list-document-type")
+    @GetMapping("all")
     public ResponseEntity<?> getListDocumentType () {
         return new ResponseEntity<>( documentTypeService.findAll(), HttpStatus.OK);
     }

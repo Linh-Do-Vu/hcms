@@ -1,5 +1,6 @@
 package com.example.ezhcm.service.doc_document;
 
+import com.example.ezhcm.dto.DocumentProjectSimpleDTO;
 import com.example.ezhcm.dto.person.DocTypePersonDTO;
 import com.example.ezhcm.model.doc.DocDocument;
 import com.example.ezhcm.service.IService;
@@ -24,11 +25,13 @@ public interface IDocDocumentService extends IService<DocDocument,Long> {
     @Override
     void delete(Long aLong);
     DocDocument createDocDocument(Long documentTypeId,Long employeeId,Long customerId);
-    Page <Tuple> searchDocumentByPersonAndIdDocument(String documentNumber, Long documentTypeId,
-                                                     Long employeeId,
-                                                     LocalDateTime startDate, LocalDateTime endDate, Long state, List<Long> personId, Pageable pageable,List<Long> documentIdlist);
+    Page <Tuple> searchDocumentPersonByPersonAndIdDocument(String documentNumber, Long documentTypeId,
+                                                           Long employeeId,
+                                                           LocalDateTime startDate, LocalDateTime endDate, Long state, List<Long> personId, Pageable pageable, List<Long> documentIdlist);
 
     Optional<DocDocument> findByDocumentNumber(String number);
     List<Long> getListChildIdDepartment () ;
     Page <DocTypePersonDTO> getAllListDocPersonPage(Page <Tuple> documentPersonList, Pageable pageable) ;
+    Page<DocumentProjectSimpleDTO>getAllListDocProjectPage(Page<Object[]> documentProjectList ) ;
+    Page<Object[]> searchDocumentProjectByPersonAndDocumentIf (Long state,Long employeeId,String documentNumber,LocalDateTime startDate, LocalDateTime endDate,Long customerId,Pageable pageable) ;
 }

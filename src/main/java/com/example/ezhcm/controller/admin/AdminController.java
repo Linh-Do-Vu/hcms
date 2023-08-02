@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/admin")
+@RequestMapping("/users")
 //@Configuration
 // @EnableWebSecurity
 // @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -23,7 +23,7 @@ public class AdminController {
         this.accountService = accountService;
     }
 
-    @PostMapping("/create-employee-and-user-account")
+    @PostMapping("/admin")
 //    @PreAuthorize("hasAnyAuthority('1') or hasAuthority('ADMIN')")
 //    @PreAuthorize("hasRole('ROLE_1') or hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> createAccount(@RequestBody AccountAndEmployeeDTO accountAndEmployeeDTO) {
@@ -31,12 +31,12 @@ public class AdminController {
         return new ResponseEntity<>(accountAndEmployeeDTO1, HttpStatus.OK);
     }
 
-    @GetMapping("/list-user-account")
+    @GetMapping("/all/admin")
     public ResponseEntity<?> getListUserAccount() {
         return new ResponseEntity<>(accountDTOService.getListCoreUserAcc(), HttpStatus.OK);
     }
 
-    @PutMapping("/update-user-employee")
+    @PutMapping("/admin")
     public ResponseEntity<?> updateAccount(@RequestBody AccountAndEmployeeDTO accountAndEmployeeDTO) {
      accountDTOService.updateUserAndEmployee(accountAndEmployeeDTO);
         return new ResponseEntity<>(true, HttpStatus.OK);

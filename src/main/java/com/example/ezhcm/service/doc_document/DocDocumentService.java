@@ -1,5 +1,6 @@
 package com.example.ezhcm.service.doc_document;
 
+import com.example.ezhcm.dto.DocumentProjectSimpleDTO;
 import com.example.ezhcm.dto.person.DocTypePersonDTO;
 import com.example.ezhcm.exception.CustomException;
 import com.example.ezhcm.exception.ErrorCode;
@@ -114,8 +115,8 @@ public class DocDocumentService implements IDocDocumentService {
     }
 
     @Override
-    public Page<Tuple> searchDocumentByPersonAndIdDocument(String documentNumber, Long documentTypeId, Long employeeID,
-                                                           LocalDateTime startDate, LocalDateTime endDate, Long state, List<Long> personIdList, Pageable pageable, List<Long> documentIdlist) {
+    public Page<Tuple> searchDocumentPersonByPersonAndIdDocument(String documentNumber, Long documentTypeId, Long employeeID,
+                                                                 LocalDateTime startDate, LocalDateTime endDate, Long state, List<Long> personIdList, Pageable pageable, List<Long> documentIdlist) {
         List<Long> listIdDepartment = getListChildIdDepartment();
         return docDocumentRepository.findByCustom(documentNumber, documentTypeId,
                 employeeID, startDate, endDate, state, personIdList, listIdDepartment, pageable, documentIdlist);
@@ -141,4 +142,26 @@ public class DocDocumentService implements IDocDocumentService {
 
         return new PageImpl<>(docTypePersonDTOList, pageable, documentPersonList.getTotalElements());
     }
+
+    @Override
+    public Page<DocumentProjectSimpleDTO> getAllListDocProjectPage(Page<Object[]> documentProjectList) {
+        List <DocumentProjectSimpleDTO> dTos = new ArrayList<>() ;
+        for (Object [] obj: documentProjectList)
+        {   long documentId = ((BigDecimal) obj [0]).longValue();
+            String documentNumber = obj [1].toString() ;
+            Long state  = ((BigDecimal)obj[2]).longValue();
+            String numberContract = obj [3].toString() ;
+            String startDay = obj[4].toString();
+            String endDay = obj[5].toString();
+            DocumentProjectSimpleDTO dto = new DocumentProjectSimpleDTO(documentId,documentNumber,state,numberContract,startDay,endDay) ;
+               dTos.add(dto) ;
+
+        }
+        return new PageImpl<>(dTos, documentProjectList.getPageable(), documentProjectList.getTotalElements());
+    }
+
+    @Override
+    public Page<Object[]> searchDocumentProjectByPersonAndDocumentIf(Long state, Long employeeId, String documentNumber, LocalDateTime startDate, LocalDateTime endDate, Long customerId, Pageable pageable) {
+        List<Long> listIdDepartment = getListChildIdDepartment();
+        return docDocumentRepository.searchAllDocumentProjectByPerson(state, employeeId, documentNumber, startDate, endDate,customerId, listIdDepartment, pageable);}
 }

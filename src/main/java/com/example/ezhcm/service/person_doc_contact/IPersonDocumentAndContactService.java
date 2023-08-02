@@ -1,6 +1,7 @@
 package com.example.ezhcm.service.person_doc_contact;
 
 import com.example.ezhcm.dto.AttributeDTO;
+import com.example.ezhcm.dto.DocumentProjectSimpleDTO;
 import com.example.ezhcm.dto.EmployeeAndUserDTO;
 import com.example.ezhcm.dto.person.AllInformationDocDTO;
 import com.example.ezhcm.dto.person.DocumentAndPersonDetailDTO;
@@ -32,5 +33,7 @@ public interface IPersonDocumentAndContactService {
     EmployeeAndUserDTO getEmployeeAndUserDTO(Long userId) ;
 
     Long createDocumentProject (List<DocDocAttribute> attributeList) ;
+    Page<DocumentProjectSimpleDTO> searchListBaseDocumentProject( Long state,Long employeeId,String documentNumber,LocalDateTime startDate, LocalDateTime endDate, Long customerId, Pageable pageable);
+
 
 }
