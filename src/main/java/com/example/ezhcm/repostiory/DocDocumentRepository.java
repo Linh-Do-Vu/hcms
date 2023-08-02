@@ -70,12 +70,28 @@ public interface DocDocumentRepository extends JpaRepository<DocDocument, Long> 
     Optional<DocDocument> findDocDocumentByDocumentNumber (String number) ;
 
     @Query(nativeQuery = true,value = "SELECT\n" +
-            "    documentid,\n" +
-            "    MAX(CASE WHEN attrpath = '/root/person/address' THEN attrvalue END) AS address,\n" +
-            "    MAX(CASE WHEN attrpath = '/root/person/gender' THEN attrvalue END) AS gender\n" +
+            "    doc_document.documentid,\n" +
+            "    doc_document.documentnumber,\n" +
+            "    doc_document.state,\n" +
+            "    MAX(CASE WHEN doc_docattribute.attrpath = 'root/numberOfContract' THEN doc_docattribute.attrvalue END) AS numercontract,\n" +
+            "    MAX(CASE WHEN doc_docattribute.attrpath = 'root/startDay' THEN doc_docattribute.attrvalue END) AS startday,\n" +
+            "    MAX(CASE WHEN doc_docattribute.attrpath = 'root/endDay' THEN doc_docattribute.attrvalue END) AS endday\n" +
             "FROM doc_docattribute\n" +
-            "WHERE documentid IN (9,10,11)\n" +
-            "  AND (attrpath = '/root/person/address' OR attrpath = '/root/person/gender')\n" +
-            "GROUP BY documentid;")
-    List<Object> test () ;
+            "JOIN doc_document ON doc_document.documentid = doc_docattribute.documentid\n" +
+            "WHERE doc_docattribute.documentid IN (\n" +
+            "    SELECT doc_document.documentid\n" +
+            "    FROM doc_document \n" +
+            "    JOIN dep_employee ON doc_document.createdby = dep_employee.employeeid\n" +
+            "    WHERE \n" +
+            "        doc_document.state LIKE COALESCE(?1, doc_document.state)\n" +
+            "        AND dep_employee.employeeid LIKE COALESCE(?2, dep_employee.employeeid)\n" +
+            "        AND doc_document.documentnumber LIKE COALESCE(?3, doc_document.documentnumber)\n" +
+            "        AND (doc_document.creationdate BETWEEN COALESCE(?4, doc_document.creationdate) AND COALESCE(?5, doc_document.creationdate))\n" +
+            "        AND doc_document.customerid = (?6) \n" +
+            "        AND doc_document.departmentid in (?7) \n" +
+            ")\n" +
+            "AND (doc_docattribute.attrpath = 'root/numberOfContract' OR doc_docattribute.attrpath = 'root/startDay' OR doc_docattribute.attrpath = 'root/endDay')\n" +
+            "GROUP BY doc_document.documentid, doc_document.documentnumber, doc_document.state" +
+            " ORDER BY doc_document.documentid DESC;")
+    Page <Object> searchAllDocumentProjectByPerson (Long state,Long employeeId,String documentNumber,LocalDateTime startDate, LocalDateTime endDate,Long customerId,List<Long> listDepartmentId,Pageable pageable ) ;
 }

@@ -23,7 +23,7 @@ public class  PersonDTO {
     @NoArgsConstructor
     @Builder
     public static class PersonEducationDTO {
-        private CrmEducation crmEducation;
-        private CrmEducationType crmEducationType;
+        private CrmEducation education;
+        private CrmEducationType educationType;
     }
 }
