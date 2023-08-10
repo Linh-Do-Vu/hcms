@@ -33,40 +33,16 @@ import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping(value = "person")
+@RequestMapping(value = "persons")
 @RequiredArgsConstructor
 public class PersonController {
     private final ICrmPersonDocService personDocService;
-
-    private final IPersonDocumentAndContactService personDocContactService;
-    private final CrmPersonDocRepository repository;
     private final IPersonInformationService personInformationService;
-    private final IDocDocumentService docDocumentService;
-    private final PersonDocumentAndContactService personDocumentAndContactService ;
     private final ICrmContactTypeService contactTypeService;
     private final ICrmPersonDocTypeService personDocTypeService;
     private final ICrmEducationTypeService educationTypeService;
-    @GetMapping("/search-document-by-information-person")
-    public ResponseEntity<?> GetApplicationListByPerson(@RequestParam(value = "personId", required = false) Long personId,
-                                                        @RequestParam(value = "contactValue", required = false) String contactValue,
-                                                        @RequestParam(value = "contactTypeId", required = false) Long contactTypeId,
-                                                        @RequestParam(value = "docNumber", required = false) String docNumber,
-                                                        @RequestParam(value = "personDocTypeId", required = false) Long personDocTypeId,
-                                                        @RequestParam(value = "lastName", required = false) String lastName,
-                                                        @RequestParam(value = "firstName", required = false) String firstName,Pageable pageable
-    ) {
-        Page<Long> listDocumentId = personDocService.searchPersonByCustomWithDepartment(personId, contactValue, contactTypeId, docNumber, personDocTypeId, lastName, firstName, pageable);
-        Pageable pageable2 = PageRequest.of(0, 10000);
 
-        Page<DocTypePersonDTO> docDocuments =
-                personDocContactService.searchListBaseDocumentPerson(null, null, null, null, null, null, null,pageable2,listDocumentId.getContent().stream().collect(Collectors.toList()));
-        Page<DocTypePersonDTO> result  = new PageImpl<>(docDocuments.getContent(), listDocumentId.getPageable(), listDocumentId.getTotalElements());
-
-            return new ResponseEntity<>(result, HttpStatus.OK);
-
-    }
-
-    @GetMapping("/search-person-information")
+    @GetMapping("/search")
     public ResponseEntity<?> searchListPersonByInformation(@RequestParam(value = "personId", required = false) Long personId,
                                                            @RequestParam(value = "contactValue", required = false) String contactValue,
                                                            @RequestParam(value = "contactTypeId", required = false) Long contactTypeId,
@@ -97,13 +73,13 @@ public class PersonController {
         return new ResponseEntity<>(personDTO, HttpStatus.OK);
     }
 
-    @GetMapping("/information")
+    @GetMapping("/{personId}")
 
-    public ResponseEntity<?> getOnePersonInformation(@RequestParam(value = "personId") Long personId) {
+    public ResponseEntity<?> getOnePersonInformation(@PathVariable(value = "personId") Long personId) {
         PersonDTO personDTO = personInformationService.getPersonDetail(personId);
         return new ResponseEntity<>(personDTO, HttpStatus.OK);
     }
-    @GetMapping("/get-list-doc-contact-edu-type")
+    @GetMapping("/doc-contact-edu-types/all")
     public ResponseEntity <PersonDocContactEducationTypeDTO> getListContactType () {
         List<CrmContactType> contactTypes = contactTypeService.findAll();
         List<CrmPersonDocType> personDocTypes =  personDocTypeService.findAll();

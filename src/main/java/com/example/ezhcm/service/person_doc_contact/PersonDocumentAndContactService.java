@@ -1,6 +1,7 @@
 package com.example.ezhcm.service.person_doc_contact;
 
 import com.example.ezhcm.dto.*;
+import com.example.ezhcm.dto.doc.DocumentProjectSimpleDTO;
 import com.example.ezhcm.dto.person.AllInformationDocDTO;
 import com.example.ezhcm.dto.person.DocumentAndPersonDetailDTO;
 import com.example.ezhcm.dto.person.DocTypePersonDTO;
@@ -153,7 +154,7 @@ public class PersonDocumentAndContactService implements IPersonDocumentAndContac
             Log.info("Employee " + idEmployee + "edited" + "document number " + personDTO.getDocumentId() + ",person" + personDTO.getPerson().getPersonId());
             return personDTO;
         }
-        else throw new CustomException(ErrorCode.CONFLICT,"Bệnh án đã đóng không được chỉnh sửa !!!") ;
+        else throw new CustomException(ErrorCode.CONFLICT,"Hồ sơ nhân sự đã đóng không được chỉnh sửa !!!") ;
     }
 
     @Override
@@ -212,11 +213,11 @@ public class PersonDocumentAndContactService implements IPersonDocumentAndContac
     }
 
     @Override
-    public EmployeeAndUserDTO getEmployeeAndUserDTO(Long userId) {
+    public EmployeeAndUserDTO   getEmployeeAndUserDTO(Long userId) {
 
         CoreUserAccount ac = coreUserAccountService.findById(userId).get();
         CoreUserAccount accLogin = coreUserAccountService.getUserLogging() ;
-        if(ac.equals(accLogin) ) {
+        if(ac.equals(accLogin) || accLogin.getRole() == 1L) {
             CoreUserAccountDTO coreUserAccountDTO = CoreUserAccountDTO.builder()
                     .userAccountId(ac.getUserAccountId())
                     .username(ac.getUsername())
@@ -269,5 +270,17 @@ public class PersonDocumentAndContactService implements IPersonDocumentAndContac
        Page<Object[]> list = docDocumentService.searchDocumentProjectByPersonAndDocumentIf(state,employeeId,documentNumber,startDate,endDate,customerId,pageable);
 
         return docDocumentService.getAllListDocProjectPage(list);
+    }
+
+    @Override
+    public Long updateDocumentProject(List<DocDocAttribute> attributeListNew, Long documentId) {
+        CoreUserAccount coreUserAccount = coreUserAccountService.getUserLogging();
+        Long idEmployee = coreUserAccount.getEmployeeId() ;
+        List<DocDocAttribute> attributeListOld = docAttributeService.getAllListAttributeDetail(documentId);
+        List<DocDocAttribute> differentAttrValues = docAttributeService.getDifferentAttributeDTO(attributeListOld, attributeListNew, documentId);
+        DocDocProcessing docProcessing = docDocProcessingService.createDocProcessing(documentId, idEmployee, "edit");
+        docProcAttributeService.saveAllByDocAttribute(differentAttrValues, docProcessing.getStageId());
+        Log.info("Employee " + idEmployee + "edited" + "document number " + documentId );
+        return documentId;
     }
 }

@@ -1,6 +1,7 @@
 package com.example.ezhcm.controller.doc;
 
 import com.example.ezhcm.dto.AttributeDTO;
+import com.example.ezhcm.dto.doc.DocumentIdDTO;
 import com.example.ezhcm.dto.person.AllInformationDocDTO;
 import com.example.ezhcm.dto.person.DocumentAndPersonDetailDTO;
 import com.example.ezhcm.dto.person.DocTypePersonDTO;
@@ -8,10 +9,13 @@ import com.example.ezhcm.exception.CustomException;
 import com.example.ezhcm.exception.ErrorCode;
 import com.example.ezhcm.model.Constants;
 import com.example.ezhcm.model.Log;
+import com.example.ezhcm.service.crm_persondoc.ICrmPersonDocService;
 import com.example.ezhcm.service.doc_doc_attribute.IDocDocAttributeService;
 import com.example.ezhcm.service.person_doc_contact.IPersonDocumentAndContactService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -21,32 +25,28 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("documents-person")
+@RequestMapping("documents/document-persons")
 @RequiredArgsConstructor
 public class DocumentPersonController {
     private final IPersonDocumentAndContactService personDocContactService;
     private final IDocDocAttributeService attributeService;
-    @PostMapping("/create")
-    public ResponseEntity<?> createDocumentPerson (@RequestBody DocumentAndPersonDetailDTO documentAndPersonDetailDto) {
-        documentAndPersonDetailDto.setDocumentTypeId(Constants.HO_SO_NHAN_SU );
+    private final ICrmPersonDocService personDocService;
+
+    @PostMapping("")
+    public ResponseEntity<?> createDocumentPerson(@RequestBody DocumentAndPersonDetailDTO documentAndPersonDetailDto) {
+        documentAndPersonDetailDto.setDocumentTypeId(Constants.HO_SO_NHAN_SU);
         Long idDocument = personDocContactService.createPersonDocContact(documentAndPersonDetailDto);
         Log.info("Create person contact and document is " + idDocument);
-        String response = "IdDocument: " + idDocument;
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        DocumentIdDTO idDTO = new DocumentIdDTO(idDocument);
+        return new ResponseEntity<>(idDTO, HttpStatus.OK);
     }
 
-    @GetMapping("/{documentId}/attribute")
-    public ResponseEntity<?> getAttributeByIdDocument(@PathVariable(value = "documentId") Long idDocument) {
-        List<AttributeDTO> attributeDTOList = attributeService.getAllListAttributeByIdDocument(idDocument);
-        if (attributeDTOList.isEmpty()) throw new CustomException(ErrorCode.NOT_FOUND, " id bệnh án không tồn tại");
-        Log.info("DocumentController getAttribute where document id = " + idDocument);
-        return new ResponseEntity<>(attributeDTOList, HttpStatus.OK);
-    }
 
-    @GetMapping("/search-by-document/all")
+    @GetMapping("/search-by-document")
     public ResponseEntity<?> searchDocument(@RequestParam(value = "documentNumber", required = false) String documentNumber,
                                             @RequestParam(value = "documentTypeId", required = false) Long documentTypeId,
                                             @RequestParam(value = "employeeId", required = false) Long employeeId,
@@ -58,12 +58,32 @@ public class DocumentPersonController {
                                             @PageableDefault(value = 10) Pageable pageable
 
     ) {
-        Page<DocTypePersonDTO> docDocumentList = personDocContactService.searchListBaseDocumentPerson(documentNumber, Constants.HO_SO_NHAN_SU, employeeId, startDate, endDate, state, personIds,pageable,null);
+        Page<DocTypePersonDTO> docDocumentList = personDocContactService.searchListBaseDocumentPerson(documentNumber, Constants.HO_SO_NHAN_SU, employeeId, startDate, endDate, state, personIds, pageable, null);
 
         if (!docDocumentList.isEmpty()) {
-            return new ResponseEntity<>(docDocumentList,HttpStatus.OK);
-        } else throw new CustomException(ErrorCode.NOT_FOUND, " không tìm thấy bệnh án trùng khớp");
+            return new ResponseEntity<>(docDocumentList, HttpStatus.OK);
+        } else throw new CustomException(ErrorCode.NOT_FOUND, " không tìm thấy hồ sơ nhân sự trùng khớp");
     }
+
+    @GetMapping("/search-by-person")
+    public ResponseEntity<?> GetApplicationListByPerson(@RequestParam(value = "personId", required = false) Long personId,
+                                                        @RequestParam(value = "contactValue", required = false) String contactValue,
+                                                        @RequestParam(value = "contactTypeId", required = false) Long contactTypeId,
+                                                        @RequestParam(value = "docNumber", required = false) String docNumber,
+                                                        @RequestParam(value = "personDocTypeId", required = false) Long personDocTypeId,
+                                                        @RequestParam(value = "lastName", required = false) String lastName,
+                                                        @RequestParam(value = "firstName", required = false) String firstName,
+                                                        Pageable pageable
+    ) {
+        Page<Long> listDocumentId = personDocService.searchPersonByCustomWithDepartment(personId, contactValue, contactTypeId, docNumber, personDocTypeId, lastName, firstName, pageable);
+            Pageable pageable2 = PageRequest.of(0, 10000);
+            Page<DocTypePersonDTO> docDocuments =
+                    personDocContactService.searchListBaseDocumentPerson(null, null, null, null, null, null, null, pageable2, listDocumentId.getContent().stream().collect(Collectors.toList()));
+            Page<DocTypePersonDTO> result = new PageImpl<>(docDocuments.getContent(), listDocumentId.getPageable(), listDocumentId.getTotalElements());
+
+            return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
 
     @GetMapping("/search-document-number")
     public ResponseEntity<?> GetApplicationByID(@RequestParam(value = "documentNumber", required = false) String documentNumber) {

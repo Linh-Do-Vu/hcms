@@ -1,6 +1,6 @@
 package com.example.ezhcm.service.doc_document;
 
-import com.example.ezhcm.dto.DocumentProjectSimpleDTO;
+import com.example.ezhcm.dto.doc.DocumentProjectSimpleDTO;
 import com.example.ezhcm.dto.person.DocTypePersonDTO;
 import com.example.ezhcm.model.doc.DocDocument;
 import com.example.ezhcm.service.IService;

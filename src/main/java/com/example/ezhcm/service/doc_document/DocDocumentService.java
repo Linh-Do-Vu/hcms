@@ -1,6 +1,6 @@
 package com.example.ezhcm.service.doc_document;
 
-import com.example.ezhcm.dto.DocumentProjectSimpleDTO;
+import com.example.ezhcm.dto.doc.DocumentProjectSimpleDTO;
 import com.example.ezhcm.dto.person.DocTypePersonDTO;
 import com.example.ezhcm.exception.CustomException;
 import com.example.ezhcm.exception.ErrorCode;
@@ -14,7 +14,6 @@ import com.example.ezhcm.service.auto_pk_support.IAutoPkSupportService;
 import com.example.ezhcm.service.core_user_account.ICoreUserAccountService;
 import com.example.ezhcm.service.dep_department.IDepDepartmentService;
 import com.example.ezhcm.service.dep_employee.IDepEmployeeService;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;

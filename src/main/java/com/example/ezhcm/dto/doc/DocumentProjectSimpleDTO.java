@@ -1,4 +1,4 @@
-package com.example.ezhcm.dto;
+package com.example.ezhcm.dto.doc;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

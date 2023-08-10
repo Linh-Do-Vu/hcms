@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final ICoreUserAccountService userAccountService;
+        private final ICoreUserAccountService userAccountService;
     private final IAuthService authService;
     private final IAccountDTOService accountDTOService;
     private final PersonDocumentAndContactService personDocumentAndContactService;

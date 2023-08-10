@@ -163,16 +163,14 @@ public class CrmPersonDocService implements ICrmPersonDocService {
     }
 
     @Override
-    public Page<Long> searchPersonByCustomWithDepartment(Long personId, String contactValue, Long contactTypeId, String docNumber, Long personDocTypeId, String lastname, String firstname, Pageable pageable) {
+    public Page<Long>searchPersonByCustomWithDepartment(Long personId, String contactValue, Long contactTypeId, String docNumber, Long personDocTypeId, String lastname, String firstname, Pageable pageable) {
 
         List<Long> listDepartmentId = documentService.getListChildIdDepartment();
         Page<Long> listDocumentId = personDocRepository.searchListDocumentIdByPersonWithDepartment(personId, contactValue, contactTypeId, docNumber, personDocTypeId, lastname, firstname, pageable, listDepartmentId,Constants.HO_SO_NHAN_SU);
-
         Log.info("List person id : " + listDocumentId.toString());
-        if (listDocumentId.isEmpty()) {
-            throw new CustomException(ErrorCode.NOT_FOUND, "Không có kết quả trùng khớp");
-        } else {
-            return listDocumentId;
-        }
+        if(listDocumentId.isEmpty()) {
+            throw new CustomException (ErrorCode.NOT_FOUND,"Không tìm thấy hồ sơ nhân sự trùng khớp") ;
+        }else return listDocumentId;
+
     }
 }

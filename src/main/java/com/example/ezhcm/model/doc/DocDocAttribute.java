@@ -28,7 +28,7 @@ public class DocDocAttribute {
      @Column(name = "attrtype")
     private Long attrType;
 
-     @Column(name = "attrvalue",columnDefinition = "nvarchar(250)")
+     @Column(name = "attrvalue",columnDefinition = "nvarchar(4000)",nullable = false)
     private String attrValue;
 
 }
