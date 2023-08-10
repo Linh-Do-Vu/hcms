@@ -11,7 +11,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import java.util.Date;
 
-@RestControllerAdvice(value = "com.example.hospital8.controller")
+@RestControllerAdvice(value = "com.example.ezhcm.controller")
 public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value = CustomException.class)
     public ResponseEntity<?> handleSelfServiceException(CustomException e, WebRequest webRequest) {
