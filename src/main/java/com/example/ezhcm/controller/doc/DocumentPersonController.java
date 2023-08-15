@@ -92,25 +92,21 @@ public class DocumentPersonController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @PutMapping("")
-    public ResponseEntity<?> updatePersonInformationAndDocument(@RequestBody DocumentAndPersonDetailDTO personDocDTO) {
+    @PutMapping("/{documentId}")
+    public ResponseEntity<?> updatePersonInformationAndDocument(@RequestBody DocumentAndPersonDetailDTO personDocDTO,
+                                                                @PathVariable(value = "documentId") Long documentId) {
+
         Log.info("DocumentController.updatePersonInformationAndDocument ");
+        personDocDTO.setDocumentId(documentId);
         DocumentAndPersonDetailDTO result = personDocContactService.updateDocumentAndPersonDetail(personDocDTO);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @GetMapping("{documentId}")
+    @GetMapping("/{documentId}")
     public ResponseEntity<?> getListDocPersonDetail(@PathVariable("documentId") Long documentId) {
         Log.info("DocumentController getListDocPersonDetail");
         AllInformationDocDTO result = personDocContactService.getAllInformationDocPerson(documentId);
         return new ResponseEntity<>(result, HttpStatus.OK);
-    }
-
-    @PutMapping("/{documentId}/close")
-    public ResponseEntity<?> closeDocument(@PathVariable(value = "documentId") Long idDocument,
-                                           @RequestParam(value = "comment") String comment
-    ) {
-        return new ResponseEntity<>(personDocContactService.closeDocument(idDocument, comment), HttpStatus.OK);
     }
 }
 

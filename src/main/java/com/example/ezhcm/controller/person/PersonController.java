@@ -3,6 +3,7 @@ package com.example.ezhcm.controller.person;
 import com.example.ezhcm.dto.person.DocTypePersonDTO;
 import com.example.ezhcm.dto.person.PersonDTO;
 import com.example.ezhcm.dto.person.PersonDocContactEducationTypeDTO;
+import com.example.ezhcm.dto.person.PersonSimpleDTO;
 import com.example.ezhcm.exception.CustomException;
 import com.example.ezhcm.exception.ErrorCode;
 import com.example.ezhcm.model.person.CrmContactType;
@@ -11,6 +12,7 @@ import com.example.ezhcm.model.person.CrmPersonDocType;
 import com.example.ezhcm.repostiory.CrmPersonDocRepository;
 import com.example.ezhcm.service.crm_contacttype.ICrmContactTypeService;
 import com.example.ezhcm.service.crm_educationtype.ICrmEducationTypeService;
+import com.example.ezhcm.service.crm_person.ICrmPerSonService;
 import com.example.ezhcm.service.crm_persondoc.ICrmPersonDocService;
 import com.example.ezhcm.service.crm_persondoctype.ICrmPersonDocTypeService;
 import com.example.ezhcm.service.doc_document.IDocDocumentService;
@@ -41,6 +43,7 @@ public class PersonController {
     private final ICrmContactTypeService contactTypeService;
     private final ICrmPersonDocTypeService personDocTypeService;
     private final ICrmEducationTypeService educationTypeService;
+    private final ICrmPerSonService perSonService ;
 
     @GetMapping("/search")
     public ResponseEntity<?> searchListPersonByInformation(@RequestParam(value = "personId", required = false) Long personId,
@@ -90,4 +93,9 @@ public class PersonController {
         typeDTO.setEducationTypes(educations);
         return new ResponseEntity<>(typeDTO, HttpStatus.OK);
     }
+    @GetMapping("/all")
+    public  ResponseEntity<List<PersonSimpleDTO>> getListPersonSimp () {
+        return new ResponseEntity<>(perSonService.getListPersonSimple(),HttpStatus.OK) ;
+    }
+
 }

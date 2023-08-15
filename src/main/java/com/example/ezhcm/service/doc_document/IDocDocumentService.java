@@ -32,6 +32,6 @@ public interface IDocDocumentService extends IService<DocDocument,Long> {
     Optional<DocDocument> findByDocumentNumber(String number);
     List<Long> getListChildIdDepartment () ;
     Page <DocTypePersonDTO> getAllListDocPersonPage(Page <Tuple> documentPersonList, Pageable pageable) ;
-    Page<DocumentProjectSimpleDTO>getAllListDocProjectPage(Page<Object[]> documentProjectList ) ;
+    Page<DocumentProjectSimpleDTO> getAllListDocProjectPage(Page<Object[]> documentProjectList ) ;
     Page<Object[]> searchDocumentProjectByPersonAndDocumentIf (Long state,Long employeeId,String documentNumber,LocalDateTime startDate, LocalDateTime endDate,Long customerId,Pageable pageable) ;
 }

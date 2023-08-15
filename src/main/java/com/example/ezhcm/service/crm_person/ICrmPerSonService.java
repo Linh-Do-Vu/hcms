@@ -1,5 +1,6 @@
 package com.example.ezhcm.service.crm_person;
 
+import com.example.ezhcm.dto.person.PersonSimpleDTO;
 import com.example.ezhcm.model.person.CrmPerson;
 import com.example.ezhcm.service.IService;
 
@@ -20,5 +21,5 @@ public interface ICrmPerSonService extends IService<CrmPerson,Long> {
 
     @Override
     void delete(Long aLong);
-
+List<PersonSimpleDTO> getListPersonSimple () ;
 }

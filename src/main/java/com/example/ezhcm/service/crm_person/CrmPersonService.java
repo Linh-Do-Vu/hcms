@@ -1,5 +1,6 @@
 package com.example.ezhcm.service.crm_person;
 
+import com.example.ezhcm.dto.person.PersonSimpleDTO;
 import com.example.ezhcm.exception.CustomException;
 import com.example.ezhcm.exception.ErrorCode;
 import com.example.ezhcm.model.Log;
@@ -9,13 +10,17 @@ import com.example.ezhcm.repostiory.CrmPersonRepository;
 import com.example.ezhcm.service.auto_pk_support.IAutoPkSupportService;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
 @Service
 public class CrmPersonService implements ICrmPerSonService{
     private final CrmPersonRepository personRepository;
     private final IAutoPkSupportService autoPkSupportService;
-
+@PersistenceContext
+private EntityManager entityManager ;
     public CrmPersonService(CrmPersonRepository personRepository, IAutoPkSupportService autoPkSupportService) {
         this.personRepository = personRepository;
         this.autoPkSupportService = autoPkSupportService;
@@ -61,4 +66,11 @@ public class CrmPersonService implements ICrmPerSonService{
 
     }
 
+    @Override
+    public List<PersonSimpleDTO> getListPersonSimple() {
+        @SuppressWarnings("JpaQlInspection")
+        String hql  = "Select new com.example.ezhcm.dto.person.PersonSimpleDTO(p.personId,p.firstName,p.lastName) from CrmPerson p " ;
+        TypedQuery<PersonSimpleDTO> query = entityManager.createQuery(hql, PersonSimpleDTO.class) ;
+        return query.getResultList() ;
+    }
 }

@@ -1,5 +1,6 @@
 package com.example.ezhcm.repostiory;
 
+import com.example.ezhcm.dto.doc.DocumentProjectDetailDTO;
 import com.example.ezhcm.model.doc.DocDocument;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.Tuple;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Repository
@@ -90,8 +92,32 @@ public interface DocDocumentRepository extends JpaRepository<DocDocument, Long> 
             "        AND doc_document.customerid = (?6) \n" +
             "        AND doc_document.departmentid in (?7) \n" +
             ")\n" +
-            "AND (doc_docattribute.attrpath = 'root/numberOfContract' OR doc_docattribute.attrpath = 'root/startDay' OR doc_docattribute.attrpath = 'root/endDay')\n" +
+            "AND (doc_docattribute.attrpath = 'root/numberOfContract' " +
+            "OR doc_docattribute.attrpath = 'root/startDay' " +
+            "OR doc_docattribute.attrpath = 'root/endDay')\n" +
             "GROUP BY doc_document.documentid, doc_document.documentnumber, doc_document.state" +
             " ORDER BY doc_document.documentid DESC;")
     Page <Object[]> searchAllDocumentProjectByPerson (Long state,Long employeeId,String documentNumber,LocalDateTime startDate, LocalDateTime endDate,Long customerId,List<Long> listDepartmentId,Pageable pageable ) ;
+
+
+    @Query(value = "" +
+            "SELECT\n" +
+            "    doc_document.documentid,\n" +
+            "    doc_document.documentnumber,\n" +
+            "    doc_document.state,\n" +
+            "    doc_document.creationdate,\n" +
+            "    dep_employee.firstname,\n" +
+            "\tdep_employee.lastname,\n" +
+            "    MAX(CASE WHEN doc_docattribute.attrpath = 'root/numberOfContract' THEN doc_docattribute.attrvalue END) AS numercontract,\n" +
+            "    MAX(CASE WHEN doc_docattribute.attrpath = 'root/startDay' THEN doc_docattribute.attrvalue END) AS startday,\n" +
+            "    MAX(CASE WHEN doc_docattribute.attrpath = 'root/endDay' THEN doc_docattribute.attrvalue END) AS endday,\n" +
+            "    MAX(CASE WHEN doc_docattribute.attrpath = 'root/personList' THEN doc_docattribute.attrvalue END) AS personList\n" +
+            "FROM doc_document\n" +
+            "JOIN dep_employee ON doc_document.createdby = dep_employee.employeeid\n" +
+            "JOIN doc_docattribute ON doc_document.documentid = doc_docattribute.documentid\n" +
+            "WHERE doc_docattribute.documentid = ?1 \n" +
+            "    AND doc_docattribute.attrpath IN ('root/numberOfContract', 'root/startDay', 'root/endDay', 'root/personList')\n" +
+            "GROUP BY doc_document.documentid, doc_document.documentnumber, doc_document.state, doc_document.creationdate, dep_employee.firstname,dep_employee.lastname\n" +
+            "ORDER BY doc_document.documentid DESC;",nativeQuery = true)
+    Object[] getDocumentProjectDetailDTO(Long documentId);
 }
