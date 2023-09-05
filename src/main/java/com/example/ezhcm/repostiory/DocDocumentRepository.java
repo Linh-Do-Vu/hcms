@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Tuple;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -102,7 +103,7 @@ public interface DocDocumentRepository extends JpaRepository<DocDocument, Long> 
 
     @Query(value = "" +
             "SELECT\n" +
-            "    doc_document.documentid,\n" +
+            "    doc_document.documentid    ,\n" +
             "    doc_document.documentnumber,\n" +
             "    doc_document.state,\n" +
             "    doc_document.creationdate,\n" +
@@ -119,5 +120,5 @@ public interface DocDocumentRepository extends JpaRepository<DocDocument, Long> 
             "    AND doc_docattribute.attrpath IN ('root/numberOfContract', 'root/startDay', 'root/endDay', 'root/personList')\n" +
             "GROUP BY doc_document.documentid, doc_document.documentnumber, doc_document.state, doc_document.creationdate, dep_employee.firstname,dep_employee.lastname\n" +
             "ORDER BY doc_document.documentid DESC;",nativeQuery = true)
-    Object[] getDocumentProjectDetailDTO(Long documentId);
+  List <Object[]> getDocumentProjectDetailDTO(Long documentId);
 }

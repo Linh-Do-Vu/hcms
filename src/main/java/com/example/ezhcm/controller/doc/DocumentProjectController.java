@@ -2,6 +2,7 @@ package com.example.ezhcm.controller.doc;
 import com.example.ezhcm.dto.AttributeListDTO;
 import com.example.ezhcm.dto.doc.DocumentIdDTO;
 import com.example.ezhcm.model.Log;
+import com.example.ezhcm.service.doc_document.IDocDocumentService;
 import com.example.ezhcm.service.person_doc_contact.IPersonDocumentAndContactService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +19,7 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class DocumentProjectController {
     private final IPersonDocumentAndContactService personDocContactService;
+    private final IDocDocumentService docDocumentService ;
 
     @PostMapping("")
     public ResponseEntity<?> createDocumentProject(@RequestBody AttributeListDTO attributeList) {
@@ -44,6 +46,10 @@ public class DocumentProjectController {
         Log.info("Create document project" +idDocumentProject);
         DocumentIdDTO dto = new DocumentIdDTO(idDocumentProject) ;
         return new ResponseEntity<>(dto, HttpStatus.OK);
+    }
+    @GetMapping("/{documentId}")
+    public ResponseEntity<?> getDocumentProjectDetail(@PathVariable Long documentId) {
+        return new ResponseEntity<>(docDocumentService.getDocumentProjectDetailById(documentId), HttpStatus.OK);
     }
 
 }

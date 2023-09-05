@@ -1,9 +1,11 @@
 package com.example.ezhcm.service.doc_document;
 
+import com.example.ezhcm.dto.doc.DocumentProjectDetailDTO;
 import com.example.ezhcm.dto.doc.DocumentProjectSimpleDTO;
 import com.example.ezhcm.dto.person.DocTypePersonDTO;
 import com.example.ezhcm.model.doc.DocDocument;
 import com.example.ezhcm.service.IService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -34,4 +36,6 @@ public interface IDocDocumentService extends IService<DocDocument,Long> {
     Page <DocTypePersonDTO> getAllListDocPersonPage(Page <Tuple> documentPersonList, Pageable pageable) ;
     Page<DocumentProjectSimpleDTO> getAllListDocProjectPage(Page<Object[]> documentProjectList ) ;
     Page<Object[]> searchDocumentProjectByPersonAndDocumentIf (Long state,Long employeeId,String documentNumber,LocalDateTime startDate, LocalDateTime endDate,Long customerId,Pageable pageable) ;
+    DocumentProjectDetailDTO getDocumentProjectDetailById (Long documentId);
+    DocumentProjectDetailDTO convertDocumentProjectDetail (List <Object []> documentProjectDetail) throws JsonProcessingException;
 }

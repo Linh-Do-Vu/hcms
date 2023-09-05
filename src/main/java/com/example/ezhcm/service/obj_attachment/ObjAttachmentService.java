@@ -105,8 +105,12 @@ public class ObjAttachmentService implements IObjAttachmentService {
             if (docDocument1.get().getState() == 1) {
                 DocDocument docDocument = docDocument1.get();
                 Long personId = docDocument.getCustomerId();
-                CrmPerson person = perSonService.findById(personId).get();
-                String identifier = person.getFirstName() + " " + person.getLastName();
+                String identifier = "" ;
+                if(personId != 0) {
+                    CrmPerson person = perSonService.findById(personId).get();
+                    identifier = person.getFirstName() + " " + person.getLastName();
+                } else identifier = "Hồ sơ dự án" ;
+
                 Long employeeId = accountService.getUserLogging().getEmployeeId();
                 ObjAttachment attachment = ObjAttachment.builder()
                         .attachmentId(idAttachment)
@@ -124,9 +128,9 @@ public class ObjAttachmentService implements IObjAttachmentService {
                 filesStorageService.save(file, idAttachment);
                 Log.info("document" + documentId + " add new attachment ");
                 return attachment;
-            }else throw new CustomException(ErrorCode.CONFLICT,"Bệnh án đã đóng không thể tải tệp đính kèm");
+            }else throw new CustomException(ErrorCode.CONFLICT,"Hồ sơ đã đóng không thể tải tệp đính kèm");
 
-        } else throw new CustomException(ErrorCode.NOT_FOUND, "Mã id bệnh án không tồn tại");
+        } else throw new CustomException(ErrorCode.NOT_FOUND, "Mã id hồ sơ không tìm thấy");
 
 //            } else {
 //                throw new CustomException(ErrorCode.CONFLICT,

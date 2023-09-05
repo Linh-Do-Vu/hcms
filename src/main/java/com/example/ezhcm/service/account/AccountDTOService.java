@@ -82,9 +82,10 @@ public class AccountDTOService implements IAccountDTOService {
         userAccount.setLastLogin(lastLogin);
         LocalDateTime createDate = userAccountOld.getCreationDate();
         userAccount.setCreationDate(createDate);
-        if (userAccount.isStatus() && userAccount.getFailedLogin() >=  Long.valueOf(itemService.findAllByReferenceId(Constants.COUNT_LOGIN_FALSE_REFERENCE_ITEM).get(0).getFullValue())) {
+        if (userAccount.isStatus() && userAccountOld.getFailedLogin() >= Long.valueOf(itemService.findAllByReferenceId(Constants.COUNT_LOGIN_FALSE_REFERENCE_ITEM).get(0).getFullValue())) {
             userAccount.setFailedLogin(0L);
-        }
+        } else userAccount.setFailedLogin(userAccountOld.getFailedLogin());
         coreUserAccountService.save(userAccount);
     }
 }
+

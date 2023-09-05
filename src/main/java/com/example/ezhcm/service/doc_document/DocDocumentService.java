@@ -1,5 +1,6 @@
 package com.example.ezhcm.service.doc_document;
 
+import com.example.ezhcm.dto.doc.DocumentProjectDetailDTO;
 import com.example.ezhcm.dto.doc.DocumentProjectSimpleDTO;
 import com.example.ezhcm.dto.person.DocTypePersonDTO;
 import com.example.ezhcm.exception.CustomException;
@@ -14,6 +15,8 @@ import com.example.ezhcm.service.auto_pk_support.IAutoPkSupportService;
 import com.example.ezhcm.service.core_user_account.ICoreUserAccountService;
 import com.example.ezhcm.service.dep_department.IDepDepartmentService;
 import com.example.ezhcm.service.dep_employee.IDepEmployeeService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -22,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.Tuple;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -144,16 +148,16 @@ public class DocDocumentService implements IDocDocumentService {
 
     @Override
     public Page<DocumentProjectSimpleDTO> getAllListDocProjectPage(Page<Object[]> documentProjectList) {
-        List <DocumentProjectSimpleDTO> dTos = new ArrayList<>() ;
-        for (Object [] obj: documentProjectList)
-        {   long documentId = ((BigDecimal) obj [0]).longValue();
-            String documentNumber = obj [1].toString() ;
-            Long state  = ((BigDecimal)obj[2]).longValue();
-            String numberContract = obj [3].toString() ;
+        List<DocumentProjectSimpleDTO> dTos = new ArrayList<>();
+        for (Object[] obj : documentProjectList) {
+            long documentId = ((BigDecimal) obj[0]).longValue();
+            String documentNumber = obj[1].toString();
+            Long state = ((BigDecimal) obj[2]).longValue();
+            String numberContract = obj[3].toString();
             String startDay = obj[4].toString();
             String endDay = obj[5].toString();
-            DocumentProjectSimpleDTO dto = new DocumentProjectSimpleDTO(documentId,documentNumber,state,numberContract,startDay,endDay) ;
-               dTos.add(dto) ;
+            DocumentProjectSimpleDTO dto = new DocumentProjectSimpleDTO(documentId, documentNumber, state, numberContract, startDay, endDay);
+            dTos.add(dto);
 
         }
         return new PageImpl<>(dTos, documentProjectList.getPageable(), documentProjectList.getTotalElements());
@@ -162,5 +166,40 @@ public class DocDocumentService implements IDocDocumentService {
     @Override
     public Page<Object[]> searchDocumentProjectByPersonAndDocumentIf(Long state, Long employeeId, String documentNumber, LocalDateTime startDate, LocalDateTime endDate, Long customerId, Pageable pageable) {
         List<Long> listIdDepartment = getListChildIdDepartment();
-        return docDocumentRepository.searchAllDocumentProjectByPerson(state, employeeId, documentNumber, startDate, endDate,customerId, listIdDepartment, pageable);}
+        return docDocumentRepository.searchAllDocumentProjectByPerson(state, employeeId, documentNumber, startDate, endDate, customerId, listIdDepartment, pageable);
+    }
+
+    @Override
+    public DocumentProjectDetailDTO getDocumentProjectDetailById(Long documentId) {
+        List<Object[]> document = docDocumentRepository.getDocumentProjectDetailDTO(documentId);
+        try {
+            return convertDocumentProjectDetail(document);
+
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public DocumentProjectDetailDTO convertDocumentProjectDetail(List<Object[]> documentProject) throws JsonProcessingException {
+        DocumentProjectDetailDTO result = new DocumentProjectDetailDTO();
+        for (Object[] documentProjectDetail : documentProject) {
+
+            Long documentId = ((BigDecimal) documentProjectDetail[0]).longValue();
+            String documentNumber = documentProjectDetail[1].toString();
+            Long state = ((BigDecimal) documentProjectDetail[2]).longValue();
+            Timestamp creationDateAsTimestamp = (Timestamp) documentProjectDetail[3];
+            LocalDateTime creationDate = creationDateAsTimestamp.toLocalDateTime();
+            String firstName = documentProjectDetail[4].toString();
+            String lastName = documentProjectDetail[5].toString();
+            String numberContract = documentProjectDetail[6].toString();
+            String startDay = documentProjectDetail[7].toString();
+            String endDay = documentProjectDetail[8].toString();
+            String personList = documentProjectDetail[9].toString();
+            ObjectMapper objectMapper = new ObjectMapper();
+            List<Integer> numberList = objectMapper.readValue(personList, List.class);
+            result = new DocumentProjectDetailDTO(documentId, documentNumber, state, creationDate, firstName, lastName, numberContract, startDay, endDay, numberList);
+        }
+        return result;
+    }
 }

@@ -49,7 +49,7 @@ public class FileController {
     @GetMapping("attachments/attachment-types/all")
     ResponseEntity<?> getListAttachType() {
         List<ObjAttachType> typeList = attachTypeService.findAll();
-        List<AttachTypeDTO> attachTypeDTOS = typeList.stream().map(ObjAttachType-> new AttachTypeDTO(ObjAttachType.getAttachmentTypeId(),ObjAttachType.getAttTypePath()) ).collect(Collectors.toList());
+        List<AttachTypeDTO> attachTypeDTOS = typeList.stream().map(ObjAttachType -> new AttachTypeDTO(ObjAttachType.getAttachmentTypeId(), ObjAttachType.getAttTypePath())).collect(Collectors.toList());
         return new ResponseEntity<>(attachTypeDTOS, HttpStatus.OK);
     }
 
@@ -59,10 +59,10 @@ public class FileController {
         return new ResponseEntity<>(typeList, HttpStatus.OK);
     }
 
-@GetMapping("attachments/{attachmentId}/download")
-    ResponseEntity <?> downloadFile (@PathVariable("attachmentId") Long idAttachment) {
-        return attachmentService.downloadFile(idAttachment) ;
-}
+    @GetMapping("attachments/{attachmentId}/download")
+    ResponseEntity<?> downloadFile(@PathVariable("attachmentId") Long idAttachment) {
+        return attachmentService.downloadFile(idAttachment);
+    }
 
 
 }
