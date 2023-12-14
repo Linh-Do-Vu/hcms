@@ -20,15 +20,16 @@ public class ObjAttachType {
     private Long attachmentTypeId;
     @Column(name = "parenttypeid")
     private Long parentTypeId;
-  @Column(name = "sysname")
+    @Column(name = "sysname")
     private String sysName;
-  @Column(name = "atttypepath",columnDefinition = "nvarchar(250)")
+    @Column(name = "atttypepath", columnDefinition = "nvarchar(250)")
     private String attTypePath;
 
-  @Column(name = "maxfilesize")
+    @Column(name = "maxfilesize")
     private Long maxFileSize;
 
-  @Column(name = "maskfile")
+    @Column(name = "maskfile")
     private String maskFile;
-
+    @Column(name = "type")
+    private Long type;
 }

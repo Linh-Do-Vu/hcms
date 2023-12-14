@@ -22,10 +22,7 @@ public class RoleController {
     public ResponseEntity<?> getListRoles() {
         return new ResponseEntity<>(role.findAll(), HttpStatus.OK);
     }
-     @GetMapping("test")
-    public ResponseEntity<?> getListRoles1() {
-        return new ResponseEntity<>(docDocumentRepository.getDocumentProjectDetailDTO(43L), HttpStatus.OK);
-    }
+
 
 
 }

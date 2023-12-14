@@ -34,4 +34,14 @@ public class ObjAttachTypeService implements IObjAttachTypeService {
     public Optional<ObjAttachType> findById(Long aLong) {
         return attachTypeRepository.findById(aLong);
     }
+
+    @Override
+    public List<ObjAttachType> findAllProjectProfile() {
+        return attachTypeRepository.findObjAttachTypeByType(2L);
+    }
+
+    @Override
+    public List<ObjAttachType> findAllHRRecords() {
+        return attachTypeRepository.findObjAttachTypeByType(1L);
+    }
 }

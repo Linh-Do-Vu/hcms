@@ -18,9 +18,9 @@ import java.nio.file.Paths;
 import java.util.stream.Stream;
 @Service
 public class FilesStorageService implements IFilesStorageService {
-    private final Path root = Paths.get("uploads");
+//    private final Path root = Paths.get("uploads");
 
-//    private final Path root = Paths.get("/opt/ezhospital/upload");
+    private final Path root = Paths.get("/opt/newez/upload");
 
     @Override
     public void init() {
@@ -34,6 +34,7 @@ public class FilesStorageService implements IFilesStorageService {
 
     @Override
     public String save(MultipartFile file,Long idAttachment) {
+        init();
         try {
             String originalFilename = file.getOriginalFilename();
             String newFilename = idAttachment + "-" + originalFilename; // Thay đổi tên file

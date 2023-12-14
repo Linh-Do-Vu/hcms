@@ -41,4 +41,10 @@ public class ContactTypeService implements ICrmContactTypeService{
     public Optional<CrmContactType> findById(Long aLong) {
         return contactTypeRepository.findById(aLong);
     }
+    @Override
+    public CrmContactType createContactType(CrmContactType crmContactType) {
+        Long id = autoPkSupportService.generateId(Constants.CONTACT_TYPE);
+        crmContactType.setContactTypeId(id);
+        return  save(crmContactType) ;
+    }
 }

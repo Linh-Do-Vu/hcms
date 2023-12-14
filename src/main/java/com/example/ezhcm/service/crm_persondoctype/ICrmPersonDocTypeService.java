@@ -18,4 +18,5 @@ public interface ICrmPersonDocTypeService extends IService<CrmPersonDocType,Long
 
     @Override
     void delete(Long aLong);
+    CrmPersonDocType createPersonDocType ( CrmPersonDocType personDocType) ;
 }

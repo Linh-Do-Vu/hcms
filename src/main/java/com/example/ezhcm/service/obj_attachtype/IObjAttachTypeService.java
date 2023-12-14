@@ -18,4 +18,7 @@ public interface IObjAttachTypeService extends IService<ObjAttachType,Long> {
 
     @Override
     Optional<ObjAttachType> findById(Long aLong);
+    List<ObjAttachType> findAllProjectProfile () ;
+    List<ObjAttachType> findAllHRRecords () ;
+
 }

@@ -18,4 +18,5 @@ public interface ICrmContactTypeService extends IService<CrmContactType,Long> {
 
     @Override
     Optional<CrmContactType> findById(Long aLong);
+    CrmContactType createContactType (CrmContactType crmContactType) ;
 }

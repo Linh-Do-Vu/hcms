@@ -40,4 +40,10 @@ public class CrmPersonDocTypeService implements ICrmPersonDocTypeService {
     public void delete(Long aLong) {
         personDocTypeRepository.deleteById(aLong);
     }
+    @Override
+    public CrmPersonDocType createPersonDocType(CrmPersonDocType personDocType) {
+        Long id = autoPkSupportService.generateId(Constants.PERSON_DOC_TYPE);
+        personDocType.setPersonDocTypeId(id);
+        return save(personDocType);
+    }
 }

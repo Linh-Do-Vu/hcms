@@ -21,4 +21,5 @@ public interface IRefRefItemService extends IService<RefRefItem,Long> {
     void delete(Long aLong);
 
     List<RefRefItem> findAllByReferenceId (Long referenceId) ;
+    RefRefItem createRefRefItem(RefRefItem refRefItem);
 }

@@ -7,6 +7,7 @@ public class Constants {
     public static final String PERSON = "crm_person";
     public static final String PERSON_DOC = "crm_persondoc";
     public static final String PERSON_DOC_TYPE = "crm_persondoctype";
+    public static final String EDUCATION_TYPE = "crm_educationtype";
     public static final Long POSITION_REFERENCE_ITEM = 2002L;
     public static final Long COUNT_LOGIN_FALSE_REFERENCE_ITEM = 2003L;
 
