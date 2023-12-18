@@ -13,6 +13,7 @@ import com.example.ezhcm.service.crm_persondoc.ICrmPersonDocService;
 import com.example.ezhcm.service.doc_doc_attribute.IDocDocAttributeService;
 import com.example.ezhcm.service.person_doc_contact.IPersonDocumentAndContactService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -21,6 +22,10 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -31,6 +36,10 @@ import java.util.stream.Collectors;
 @CrossOrigin("*")
 @RequestMapping("documents/document-persons")
 @RequiredArgsConstructor
+@Configuration
+@EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableMethodSecurity
 public class DocumentPersonController {
     private final IPersonDocumentAndContactService personDocContactService;
     private final IDocDocAttributeService attributeService;
@@ -76,12 +85,12 @@ public class DocumentPersonController {
                                                         Pageable pageable
     ) {
         Page<Long> listDocumentId = personDocService.searchPersonByCustomWithDepartment(personId, contactValue, contactTypeId, docNumber, personDocTypeId, lastName, firstName, pageable);
-            Pageable pageable2 = PageRequest.of(0, 10000);
-            Page<DocTypePersonDTO> docDocuments =
-                    personDocContactService.searchListBaseDocumentPerson(null, null, null, null, null, null, null, pageable2, listDocumentId.getContent().stream().collect(Collectors.toList()));
-            Page<DocTypePersonDTO> result = new PageImpl<>(docDocuments.getContent(), listDocumentId.getPageable(), listDocumentId.getTotalElements());
+        Pageable pageable2 = PageRequest.of(0, 10000);
+        Page<DocTypePersonDTO> docDocuments =
+                personDocContactService.searchListBaseDocumentPerson(null, null, null, null, null, null, null, pageable2, listDocumentId.getContent().stream().collect(Collectors.toList()));
+        Page<DocTypePersonDTO> result = new PageImpl<>(docDocuments.getContent(), listDocumentId.getPageable(), listDocumentId.getTotalElements());
 
-            return new ResponseEntity<>(result, HttpStatus.OK);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
 
@@ -93,9 +102,9 @@ public class DocumentPersonController {
     }
 
     @PutMapping("/{documentId}")
+    @PreAuthorize("hasAnyAuthority('1')or hasAuthority('2')")
     public ResponseEntity<?> updatePersonInformationAndDocument(@RequestBody DocumentAndPersonDetailDTO personDocDTO,
                                                                 @PathVariable(value = "documentId") Long documentId) {
-
         Log.info("DocumentController.updatePersonInformationAndDocument ");
         personDocDTO.setDocumentId(documentId);
         DocumentAndPersonDetailDTO result = personDocContactService.updateDocumentAndPersonDetail(personDocDTO);
@@ -103,6 +112,7 @@ public class DocumentPersonController {
     }
 
     @GetMapping("/{documentId}")
+    @PreAuthorize("hasAnyAuthority('1')  or hasAuthority('2') or hasAuthority('3')") // 1=ADMIN // 2=EDITER 3= VIEWER
     public ResponseEntity<?> getListDocPersonDetail(@PathVariable("documentId") Long documentId) {
         Log.info("DocumentController getListDocPersonDetail");
         AllInformationDocDTO result = personDocContactService.getAllInformationDocPerson(documentId);

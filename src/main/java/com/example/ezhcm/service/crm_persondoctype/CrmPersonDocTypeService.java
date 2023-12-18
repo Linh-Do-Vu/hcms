@@ -31,8 +31,6 @@ public class CrmPersonDocTypeService implements ICrmPersonDocTypeService {
 
     @Override
     public CrmPersonDocType save(CrmPersonDocType crmPersonDocType) {
-        Long id = autoPkSupportService.generateId(Constants.PERSON_DOC_TYPE);
-        crmPersonDocType.setPersonDocTypeId(id);
         return personDocTypeRepository.save(crmPersonDocType);
     }
 

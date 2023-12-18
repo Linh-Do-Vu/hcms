@@ -54,7 +54,7 @@ public class PersonInformationService implements IPersonInformationService {
         List<CrmEducationType> educationTypeList = educationTypeService.findAll() ;
         List<PersonDTO.PersonEducationDTO> personEducationDTOS = educationList.stream().map(crmEducation ->{
             CrmEducationType crmEducationTypeMatch = educationTypeList.stream().filter(crmEducationType ->
-                crmEducationType.getEduTypeID().equals(crmEducation.getEduTypeId())).findFirst().orElse(null);
+                crmEducationType.getEduTypeId().equals(crmEducation.getEduTypeId())).findFirst().orElse(null);
         return PersonDTO.PersonEducationDTO.builder().education(crmEducation).educationType(crmEducationTypeMatch).build();
         }).collect(Collectors.toList());
 

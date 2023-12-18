@@ -17,7 +17,7 @@ import javax.persistence.Table;
 public class CrmEducationType {
     @Id
     @Column(name = "edutypeid")
-    private Long eduTypeID;
+    private Long eduTypeId;
      @Column(name = "edutypename",columnDefinition = "nvarchar",length = 4000)
     private String eduTypeName;
      @Column(name = "isactive")

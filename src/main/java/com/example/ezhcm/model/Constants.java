@@ -29,6 +29,8 @@ public class Constants {
     public static final String OBJ_ATTACHMENT = "obj_attachment";
     public static final String OBJ_ATTACH_TYPE = "obj_attachtype";
     public static final String ROOT_DEPARTMENT = "/root/department";
+    public static final Long PROJECT_PROFILE = 2L;
+    public static final Long HR_PROFILE =1L;
 
 
 }

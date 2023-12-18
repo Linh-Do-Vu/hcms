@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping(value = "/education_types")
+@RequestMapping(value = "/education-types")
 @RequiredArgsConstructor
 @EnableMethodSecurity
 @PreAuthorize("hasAnyAuthority('1') or hasAuthority('ADMIN')")
@@ -30,7 +30,7 @@ public class EducationTypeController {
 
     @PutMapping("/{educationTypeId}")
     public ResponseEntity<?> updateEducationType(@RequestBody CrmEducationType educationType, @PathVariable(value = "educationTypeId") Long educationTypeId) {
-        educationType.setEduTypeID(educationTypeId);
+        educationType.setEduTypeId(educationTypeId);
         return new ResponseEntity<>(educationTypeService.save(educationType), HttpStatus.OK);
     }
     @GetMapping("/{educationTypeId}")

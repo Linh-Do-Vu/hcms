@@ -182,7 +182,7 @@ public class PersonDocumentAndContactService implements IPersonDocumentAndContac
             }
         } else
             Log.error(documentId + "id document not exits");
-        throw new CustomException(ErrorCode.NOT_FOUND, "Mã id bệnh án không tồn tại");
+        throw new CustomException(ErrorCode.NOT_FOUND, "Mã id hồ sơ không tồn tại");
     }
 
 
@@ -192,7 +192,7 @@ public class PersonDocumentAndContactService implements IPersonDocumentAndContac
         if (docDocument.isPresent()) {
             DocDocument document = docDocument.get();
             if (document.getState() == 2L) {
-                throw new CustomException(ErrorCode.CONFLICT, "Bệnh án đã được đóng !");
+                throw new CustomException(ErrorCode.CONFLICT, "Hồ sơ đã được đóng !");
             } else
                 document.setState(2L);
             docDocumentService.save(document);

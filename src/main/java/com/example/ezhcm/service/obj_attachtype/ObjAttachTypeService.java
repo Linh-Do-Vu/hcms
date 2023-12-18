@@ -1,19 +1,21 @@
 package com.example.ezhcm.service.obj_attachtype;
 
+import com.example.ezhcm.model.Constants;
 import com.example.ezhcm.model.file.ObjAttachType;
 import com.example.ezhcm.repostiory.ObjAttachTypeRepository;
+import com.example.ezhcm.service.auto_pk_support.IAutoPkSupportService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class ObjAttachTypeService implements IObjAttachTypeService {
     private final ObjAttachTypeRepository attachTypeRepository;
+    private final IAutoPkSupportService autoPkSupportService;
 
-    public ObjAttachTypeService(ObjAttachTypeRepository attachTypeRepository) {
-        this.attachTypeRepository = attachTypeRepository;
-    }
 
     @Override
     public List<ObjAttachType> findAll() {
@@ -37,11 +39,19 @@ public class ObjAttachTypeService implements IObjAttachTypeService {
 
     @Override
     public List<ObjAttachType> findAllProjectProfile() {
-        return attachTypeRepository.findObjAttachTypeByType(2L);
+        return attachTypeRepository.findObjAttachTypeByType(Constants.PROJECT_PROFILE);
     }
 
     @Override
     public List<ObjAttachType> findAllHRRecords() {
-        return attachTypeRepository.findObjAttachTypeByType(1L);
+        return attachTypeRepository.findObjAttachTypeByType(Constants.HR_PROFILE);
     }
+
+    @Override
+    public ObjAttachType createAttachType(ObjAttachType objAttachType) {
+        Long id = autoPkSupportService.generateId(Constants.OBJ_ATTACH_TYPE) ;
+        objAttachType.setAttachmentTypeId(id);
+        return save(objAttachType);
+    }
+
 }

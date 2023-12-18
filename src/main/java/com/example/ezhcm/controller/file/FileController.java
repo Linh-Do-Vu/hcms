@@ -46,17 +46,6 @@ public class FileController {
         return new ResponseEntity<>(attachListIdDTO, HttpStatus.OK);
     }
 
-    @GetMapping("attachments/attachment-project-types/all")
-    ResponseEntity<?> getListAttachTypeProject() {
-        List<ObjAttachType> typeList = attachTypeService.findAllProjectProfile();
-        List<AttachTypeDTO> attachTypeDTOS = typeList.stream().map(ObjAttachType -> new AttachTypeDTO(ObjAttachType.getAttachmentTypeId(), ObjAttachType.getAttTypePath())).collect(Collectors.toList());
-        return new ResponseEntity<>(attachTypeDTOS, HttpStatus.OK);
-    }    @GetMapping("attachments/attachment-person-types/all")
-    ResponseEntity<?> getListAttachTypeHR() {
-        List<ObjAttachType> typeList = attachTypeService.findAllHRRecords();
-        List<AttachTypeDTO> attachTypeDTOS = typeList.stream().map(ObjAttachType -> new AttachTypeDTO(ObjAttachType.getAttachmentTypeId(), ObjAttachType.getAttTypePath())).collect(Collectors.toList());
-        return new ResponseEntity<>(attachTypeDTOS, HttpStatus.OK);
-    }
 
     @GetMapping("/documents/{documentId}/attachments/all")
     ResponseEntity<?> getListAttByDocumentId(@PathVariable("documentId") Long documentId) {

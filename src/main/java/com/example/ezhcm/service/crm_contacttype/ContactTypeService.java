@@ -26,9 +26,6 @@ public class ContactTypeService implements ICrmContactTypeService{
 
     @Override
     public CrmContactType save(CrmContactType crmContactType) {
-        Long id = autoPkSupportService.generateId(Constants.CONTACT_TYPE);
-        crmContactType.setContactTypeId(id);
-        Log.info("ContactTypeService save");
         return contactTypeRepository.save(crmContactType);
     }
 

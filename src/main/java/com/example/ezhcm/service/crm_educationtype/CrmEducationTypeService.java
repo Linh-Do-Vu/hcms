@@ -39,7 +39,7 @@ public class CrmEducationTypeService implements ICrmEducationTypeService {
     @Override
     public CrmEducationType createEducationType(CrmEducationType crmEducationType) {
         Long id = autoPkSupportService.generateId(Constants.EDUCATION_TYPE);
-        crmEducationType.setEduTypeID(id);
+        crmEducationType.setEduTypeId(id);
         return save(crmEducationType);
     }
 }

@@ -20,5 +20,6 @@ public interface IObjAttachTypeService extends IService<ObjAttachType,Long> {
     Optional<ObjAttachType> findById(Long aLong);
     List<ObjAttachType> findAllProjectProfile () ;
     List<ObjAttachType> findAllHRRecords () ;
+    ObjAttachType createAttachType ( ObjAttachType objAttachType) ;
 
 }
