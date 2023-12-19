@@ -31,6 +31,8 @@ public class Constants {
     public static final String ROOT_DEPARTMENT = "/root/department";
     public static final Long PROJECT_PROFILE = 2L;
     public static final Long HR_PROFILE =1L;
+    public static final Long ROLE_ADMIN =1L;
+    public static final Long ROLE_EDITER =2L;
 
 
 }

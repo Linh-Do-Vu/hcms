@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -125,7 +126,6 @@ public class CoreUserAccountService implements ICoreUserAccountService {
         if (!coreUserAccount.isStatus()) {
             return false;
         }
-
         LocalDateTime currentDateTime = LocalDateTime.now();
         LocalDateTime expiryDate = coreUserAccount.getExpiryDate();
         LocalDateTime pwdExpDate = coreUserAccount.getPwdExpDate();
@@ -137,7 +137,13 @@ public class CoreUserAccountService implements ICoreUserAccountService {
         if (pwdExpDate != null && pwdExpDate.isBefore(currentDateTime)) {
             return false;
         }
-
         return true;
+    }
+
+    @Override
+    public boolean checkUserHasRoleViewSalary() {
+        CoreUserAccount userAccount = getUserLogging();
+        List<Long> listRoleAdvance = Arrays.asList(Constants.ROLE_ADMIN, Constants.ROLE_EDITER);
+        return listRoleAdvance.contains(userAccount.getRole());
     }
 }

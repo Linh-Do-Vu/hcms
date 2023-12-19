@@ -4,6 +4,7 @@ import com.example.ezhcm.dto.AttributeDTO;
 import com.example.ezhcm.exception.CustomException;
 import com.example.ezhcm.exception.ErrorCode;
 import com.example.ezhcm.model.AutoPkSupport;
+import com.example.ezhcm.model.CoreUserAccount;
 import com.example.ezhcm.model.Log;
 import com.example.ezhcm.model.Constants;
 import com.example.ezhcm.model.doc.DocDocAttribute;
@@ -13,11 +14,13 @@ import com.example.ezhcm.service.auto_pk_support.IAutoPkSupportService;
 import com.example.ezhcm.service.core_user_account.ICoreUserAccountService;
 import com.example.ezhcm.service.dep_employee.IDepEmployeeService;
 import com.example.ezhcm.service.doc_document.IDocDocumentService;
+import com.sun.javafx.collections.ArrayListenerHelper;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.Tuple;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -80,11 +83,16 @@ public class DocDocAttributeService implements IDocDocAttributeService {
     @Override
     public List<AttributeDTO> getAllListAttributeByIdDocument(Long idDocument) {
         List<Long> idDepartmentList = documentService.getListChildIdDepartment();
-       Optional<DocDocument>  docDocument = documentService.findById(idDocument);
+        Optional<DocDocument> docDocument = documentService.findById(idDocument);
         if (docDocument.isPresent()) {
             Long idDepartment = Long.valueOf(docDocument.get().getDepartmentId());
             if (idDepartmentList.contains(idDepartment)) {
-                List<Tuple> attributeData = docDocAttributeRepository.getAllListAttributeById(idDocument);
+                List<Tuple> attributeData;
+                if (coreUserAccountService.checkUserHasRoleViewSalary()) {
+                    attributeData = docDocAttributeRepository.getAllListAttributeById(idDocument);
+                } else {
+                    attributeData = docDocAttributeRepository.getAllListAttributeByIdNotViewSalary(idDocument);
+                }
                 List<AttributeDTO> attributes = new ArrayList<>();
                 for (Tuple data : attributeData) {
                     String attrPath = (String) data.get(0);
@@ -94,14 +102,16 @@ public class DocDocAttributeService implements IDocDocAttributeService {
                     attributes.add(attributeDTO);
                 }
                 return attributes;
+
+
             }
             Log.error("DocDocAttribute.getAllListAttributeByIdDocument, This medical record id you do not have permission to view or does not exist ");
-            throw new CustomException(ErrorCode.NOT_FOUND, "Bệnh án này bạn không có quyền xem hoặc không tồn tại");
+            throw new CustomException(ErrorCode.NOT_FOUND, " Hồ sơ này bạn không có quyền xem hoặc không tồn tại");
 
-        }else
+        } else
             Log.error("attribute of document id don't have attribute path /root/department, \n" +
-        "suggest testing another document id");
-            throw new CustomException(ErrorCode.NOT_FOUND, " attribute of document id don't have attribute path /root/department, \n" +
+                    "suggest testing another document id");
+        throw new CustomException(ErrorCode.NOT_FOUND, " attribute of document id don't have attribute path /root/department, \n" +
                 "suggest testing another document id");
 
     }

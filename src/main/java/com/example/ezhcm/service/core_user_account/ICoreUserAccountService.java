@@ -27,4 +27,5 @@ public interface ICoreUserAccountService extends IService<CoreUserAccount,Long>,
     Authentication getAuthentication ();
     public CoreUserAccount createCoreUserAccount(CoreUserAccount userAccount,Long employeeId) ;
     boolean checkAccountExp (CoreUserAccount account) ;
+    boolean checkUserHasRoleViewSalary () ;
 }
