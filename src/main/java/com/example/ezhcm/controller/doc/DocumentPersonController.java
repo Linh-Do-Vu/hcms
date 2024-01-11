@@ -36,10 +36,10 @@ import java.util.stream.Collectors;
 @CrossOrigin("*")
 @RequestMapping("documents/document-persons")
 @RequiredArgsConstructor
-@Configuration
-@EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
-@EnableMethodSecurity
+//@Configuration
+//@EnableWebSecurity
+//@EnableGlobalMethodSecurity(prePostEnabled = true)
+//@EnableMethodSecurity
 public class DocumentPersonController {
     private final IPersonDocumentAndContactService personDocContactService;
     private final IDocDocAttributeService attributeService;
@@ -102,7 +102,7 @@ public class DocumentPersonController {
     }
 
     @PutMapping("/{documentId}")
-    @PreAuthorize("hasAnyAuthority('1')or hasAuthority('2')")
+//    @PreAuthorize("hasAnyAuthority('1')or hasAuthority('2')")
     public ResponseEntity<?> updatePersonInformationAndDocument(@RequestBody DocumentAndPersonDetailDTO personDocDTO,
                                                                 @PathVariable(value = "documentId") Long documentId) {
         Log.info("DocumentController.updatePersonInformationAndDocument ");
@@ -112,7 +112,7 @@ public class DocumentPersonController {
     }
 
     @GetMapping("/{documentId}")
-    @PreAuthorize("hasAnyAuthority('1')  or hasAuthority('2') or hasAuthority('3')") // 1=ADMIN // 2=EDITER 3= VIEWER
+//    @PreAuthorize("hasAnyAuthority('1')  or hasAuthority('2') or hasAuthority('3')") // 1=ADMIN // 2=EDITER 3= VIEWER
     public ResponseEntity<?> getListDocPersonDetail(@PathVariable("documentId") Long documentId) {
         Log.info("DocumentController getListDocPersonDetail");
         AllInformationDocDTO result = personDocContactService.getAllInformationDocPerson(documentId);

@@ -28,5 +28,5 @@ public class DepDepartment {
     @Column(name = "deptfullname",columnDefinition = "nvarchar",length = 250)
     private String deptFullName ;
     @Column(name = "isActive")
-    private boolean isActive;
+    private boolean active;
 }

@@ -22,21 +22,26 @@ public class CrmPerson {
     @Column(name = "parentpersonid")
     private Long parentPersonId;
 
-    @Column(name = "firstname",columnDefinition = "nvarchar(250)",nullable = false)
+    @Column(name = "firstname", columnDefinition = "nvarchar(250)", nullable = false)
     private String firstName;
 
-    @Column(name = "lastname",columnDefinition = "nvarchar(250)",nullable = false)
+    @Column(name = "lastname", columnDefinition = "nvarchar(250)", nullable = false)
     private String lastName;
 
     @Column(name = "birthdate")
     private LocalDateTime birthDate;
 
-    @Column(name = "gender",nullable = false)
+    @Column(name = "gender", nullable = false)
     private Long gender;
 
-    @Column(name = "job",columnDefinition = "nvarchar(250)")
+    @Column(name = "job", columnDefinition = "nvarchar(250)")
     private String job;
 
-
+    @Column(name = "salary")
+    private Float salary;
+    @Column(name = "startdate")
+    private LocalDateTime startDate;
+    @Column(name = "enddate")
+    private LocalDateTime endDate;
 
 }

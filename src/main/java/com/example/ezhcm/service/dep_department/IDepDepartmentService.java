@@ -24,4 +24,8 @@ public interface IDepDepartmentService extends IService<DepDepartment, Long> {
     Map<Long,List<DepDepartment>>  buildHierarchy(List<DepDepartment> departments) ;
     List<Long> getChildDepartments(Long parentDepartmentId,Map<Long, List<DepDepartment>>  departmentHierarchy) ;
     Long getDepartmentId () ;
+    Long getDepartmentIdByUserLogin() ;
+
+    List<DepDepartment> findAllIsActive();
+    DepDepartment createDepartment ( DepDepartment depDepartment) ;
 }

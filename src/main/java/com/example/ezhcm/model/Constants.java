@@ -10,7 +10,7 @@ public class Constants {
     public static final String EDUCATION_TYPE = "crm_educationtype";
     public static final Long POSITION_REFERENCE_ITEM = 2002L;
     public static final Long COUNT_LOGIN_FALSE_REFERENCE_ITEM = 2003L;
-
+    public static final Long PARENT_ID = 0L ;
     public static final String DEPARTMENT = "dep_department";
     public static final Long HO_SO_NHAN_SU = 1L;
     public static final Long HO_SO_DU_AN = 2L;

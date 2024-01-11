@@ -22,30 +22,21 @@ import java.util.stream.Collectors;
 public class AttachTypeController {
     private final IObjAttachTypeService attachTypeService;
 
-    @GetMapping("attachments/attachment-project-types/all")
-    ResponseEntity<?> getListAttachTypeProject() {
-        List<ObjAttachType> typeList = attachTypeService.findAllProjectProfile();
-        List<AttachTypeDTO> attachTypeDTOS = typeList.stream().map(ObjAttachType -> new AttachTypeDTO(ObjAttachType.getAttachmentTypeId(), ObjAttachType.getAttTypePath())).collect(Collectors.toList());
-        return new ResponseEntity<>(attachTypeDTOS, HttpStatus.OK);
-    }
-
-    @GetMapping("attachments/attachment-project-types/{attachTypeId}")
+    @GetMapping("attachments/attachment-types/{attachTypeId}")
     ResponseEntity<?> getAttachTypeProjectById(@PathVariable(value = "attachTypeId") Long attachTypeId) {
         return new ResponseEntity<>(attachTypeService.findById(attachTypeId), HttpStatus.OK);
     }
 
-    @PostMapping("attachments/attachment-project-types")
-    ResponseEntity<?> createAttachmentProjectType(@RequestBody ObjAttachType objAttachType) {
-        objAttachType.setType(Constants.PROJECT_PROFILE);
-        return new ResponseEntity<>(attachTypeService.createAttachType(objAttachType), HttpStatus.OK);
-    }
-
-    @PutMapping("attachments/attachment-project-types/{attachTypeId}")
-    ResponseEntity<?> updateAttachmentProjectType(@RequestBody ObjAttachType objAttachType, @PathVariable(value = "attachTypeId") Long attachTypeId) {
+    @PutMapping("attachments/attachment-types/{attachTypeId}")
+    ResponseEntity<?> updateAttachmentType(@RequestBody ObjAttachType objAttachType, @PathVariable(value = "attachTypeId") Long attachTypeId) {
         objAttachType.setAttachmentTypeId(attachTypeId);
         return new ResponseEntity<>(attachTypeService.save(objAttachType), HttpStatus.OK);
     }
 
+    @PostMapping("attachments/attachment-types")
+    ResponseEntity<?> createAttachmentProjectType(@RequestBody ObjAttachType objAttachType) {
+        return new ResponseEntity<>(attachTypeService.createAttachType(objAttachType), HttpStatus.OK);
+    }
 
     @GetMapping("attachments/attachment-person-types/all")
     ResponseEntity<?> getListAttachTypeHR() {
@@ -54,21 +45,18 @@ public class AttachTypeController {
         return new ResponseEntity<>(attachTypeDTOS, HttpStatus.OK);
     }
 
-    @GetMapping("attachments/attachment-person-types/{attachTypeId}")
-    ResponseEntity<?> getAttachTypeHRById(@PathVariable(value = "attachTypeId") Long attachTypeId) {
-        return new ResponseEntity<>(attachTypeService.findById(attachTypeId), HttpStatus.OK);
+    @GetMapping("attachments/attachment-project-types/all")
+    ResponseEntity<?> getListAttachTypeProject() {
+        List<ObjAttachType> typeList = attachTypeService.findAllProjectProfile();
+        List<AttachTypeDTO> attachTypeDTOS = typeList.stream().map(ObjAttachType -> new AttachTypeDTO(ObjAttachType.getAttachmentTypeId(), ObjAttachType.getAttTypePath())).collect(Collectors.toList());
+        return new ResponseEntity<>(attachTypeDTOS, HttpStatus.OK);
     }
 
-    @PostMapping("attachments/attachment-person-types")
-    ResponseEntity<?> createAttachmentPersonType(@RequestBody ObjAttachType objAttachType) {
-        objAttachType.setType(Constants.HR_PROFILE);
-        return new ResponseEntity<>(attachTypeService.createAttachType(objAttachType), HttpStatus.OK);
-    }
-
-    @PutMapping("attachments/attachment-person-types/{attachTypeId}")
-    ResponseEntity<?> updateAttachmentPersonType(@RequestBody ObjAttachType objAttachType, @PathVariable(value = "attachTypeId") Long attachTypeId) {
-        objAttachType.setAttachmentTypeId(attachTypeId);
-        return new ResponseEntity<>(attachTypeService.save(objAttachType), HttpStatus.OK);
+ @GetMapping("attachments/attachment-types/all")
+    ResponseEntity<?> getListAttachTypeAll() {
+        List<ObjAttachType> typeList = attachTypeService.findAll();
+//        List<AttachTypeDTO> attachTypeDTOS = typeList.stream().map(ObjAttachType -> new AttachTypeDTO(ObjAttachType.getAttachmentTypeId(), ObjAttachType.getAttTypePath())).collect(Collectors.toList());
+        return new ResponseEntity<>(typeList, HttpStatus.OK);
     }
 
 

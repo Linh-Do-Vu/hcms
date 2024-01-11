@@ -1,27 +1,27 @@
 package com.example.ezhcm.service.dep_department;
 
+import com.example.ezhcm.model.Constants;
 import com.example.ezhcm.model.CoreUserAccount;
 import com.example.ezhcm.model.dep.DepDepartment;
 import com.example.ezhcm.repostiory.DepDepartmentRepository;
+import com.example.ezhcm.service.auto_pk_support.IAutoPkSupportService;
 import com.example.ezhcm.service.core_user_account.ICoreUserAccountService;
 import com.example.ezhcm.service.dep_employee.IDepEmployeeService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 @Service
+@AllArgsConstructor
 public class DepDepartmentService implements IDepDepartmentService {
     private final DepDepartmentRepository depDepartmentRepository;
     private final ICoreUserAccountService coreUserAccountService;
     private final IDepEmployeeService employeeService;
+    private final IAutoPkSupportService autoPkSupportService;
 
 
 
-    public DepDepartmentService(DepDepartmentRepository depDepartmentRepository, ICoreUserAccountService coreUserAccountService, IDepEmployeeService employeeService) {
-        this.depDepartmentRepository = depDepartmentRepository;
-        this.coreUserAccountService = coreUserAccountService;
-        this.employeeService = employeeService;
-    }
 
     @Override
     public List<DepDepartment> findAll() {
@@ -79,6 +79,29 @@ public class DepDepartmentService implements IDepDepartmentService {
         CoreUserAccount userAccount = coreUserAccountService.getUserLogging();
         Long idDepartment = employeeService.findById(userAccount.getEmployeeId()).get().getDepartmentId();
         return idDepartment;
+    }
+    @Override
+    public Long getDepartmentIdByUserLogin() {
+        CoreUserAccount userAccount = coreUserAccountService.getUserLogging();
+        Long idDepartment = employeeService.findById(userAccount.getEmployeeId()).get().getDepartmentId();
+        return idDepartment;
+    }
+
+    @Override
+    public List<DepDepartment> findAllIsActive() {
+
+        return depDepartmentRepository.getDepDepartmentByActiveIsTrue();
+    }
+
+    @Override
+    public DepDepartment createDepartment(DepDepartment depDepartment) {
+        if (depDepartment.getParentDepartmentId() == null && depDepartment.getDepartmentId() == null ) {
+            depDepartment.setParentDepartmentId(Constants.PARENT_ID);
+        }
+        Long id = autoPkSupportService.generateId(Constants.DEPARTMENT) ;
+        depDepartment.setDepartmentId(id);
+        save(depDepartment);
+        return depDepartment;
     }
 }
 
